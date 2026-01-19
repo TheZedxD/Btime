@@ -379,7 +379,8 @@
             font-family: 'Press Start 2P', monospace;
             font-size: 12px;
             color: var(--text-primary);
-            min-width: 24px;
+            min-width: 20px;
+            text-align: right;
         }
 
         .top-buttons {
@@ -503,6 +504,8 @@
             margin-top: var(--space-sm);
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            text-align: center;
+            white-space: nowrap;
         }
 
         /* ===== Control Buttons ===== */
@@ -629,6 +632,7 @@
             max-width: 92vw;
             max-height: 85vh;
             overflow-y: auto;
+            overflow-x: hidden;
             opacity: 0;
             visibility: hidden;
             transition: all var(--transition-medium);
@@ -649,6 +653,7 @@
             margin-bottom: var(--space-lg);
             padding-bottom: var(--space-md);
             border-bottom: 2px dashed var(--pink-light);
+            gap: var(--space-sm);
         }
 
         .panel-title {
@@ -916,9 +921,10 @@
             visibility: hidden;
             transition: all var(--transition-medium);
             z-index: 300;
-            white-space: nowrap;
+            white-space: normal;
             max-width: 90vw;
             text-align: center;
+            word-wrap: break-word;
         }
 
         .toast.show {
@@ -966,6 +972,24 @@
         }
 
         /* ===== Responsive Design ===== */
+        @media (max-width: 768px) {
+            .top-bar {
+                top: var(--space-sm);
+                left: var(--space-sm);
+                right: var(--space-sm);
+            }
+
+            .top-buttons {
+                gap: var(--space-xs);
+            }
+
+            .icon-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+        }
+
         @media (max-width: 480px) {
             :root {
                 --space-lg: 20px;
@@ -1017,13 +1041,55 @@
             }
 
             .stats-row {
-                gap: var(--space-lg);
+                gap: var(--space-md);
+                padding-top: var(--space-sm);
+            }
+
+            .celestial {
+                width: 48px;
+                height: 48px;
+            }
+
+            .setting-input {
+                width: 50px;
+                font-size: 12px;
+            }
+
+            .setting-slider {
+                width: 70px;
+            }
+
+            .coin-display {
+                padding: 6px var(--space-sm);
+            }
+
+            .coin-icon {
+                font-size: 16px;
+            }
+
+            .coin-count {
+                font-size: 11px;
+            }
+
+            .work-overlay {
+                font-size: 10px;
+                padding: var(--space-xs) var(--space-sm);
+            }
+
+            .session-info {
+                font-size: 10px;
+            }
+
+            .theme-btn {
+                padding: 5px 10px;
+                font-size: 10px;
             }
         }
 
         @media (max-width: 360px) {
             .ui-card {
                 width: 280px;
+                padding: var(--space-sm);
             }
 
             .timer-ring {
@@ -1037,6 +1103,78 @@
 
             .panel-title {
                 font-size: 12px;
+            }
+
+            .car-wrapper {
+                width: 70px;
+                height: 35px;
+            }
+
+            .wheel {
+                width: 12px;
+                height: 12px;
+            }
+
+            .wheel-front { left: 6px; }
+            .wheel-back { right: 6px; }
+
+            .celestial {
+                width: 40px;
+                height: 40px;
+            }
+
+            .stats-row {
+                gap: var(--space-md);
+            }
+
+            .stat-value {
+                font-size: 12px;
+            }
+
+            .setting-input {
+                width: 45px;
+                font-size: 11px;
+            }
+
+            .top-bar {
+                top: 6px;
+                left: 6px;
+                right: 6px;
+            }
+
+            .icon-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+
+            .mode-badge {
+                font-size: 9px;
+                letter-spacing: 1px;
+                padding: 3px 10px;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .item-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ui-card {
+                width: 260px;
+            }
+
+            .timer-ring {
+                width: 120px;
+                height: 120px;
+            }
+
+            .timer-time {
+                font-size: 18px;
+            }
+
+            .coin-display {
+                padding: 4px 8px;
             }
         }
 
@@ -2048,7 +2186,11 @@
             const coin = document.createElement('div');
             coin.className = 'floating-coin';
             coin.textContent = '🪙';
-            coin.style.left = `${15 + Math.random() * 15}%`;
+            // Position relative to car - more responsive
+            const windowWidth = window.innerWidth;
+            const carLeft = windowWidth < 480 ? 12 : (windowWidth < 768 ? 13 : 15);
+            const randomSpread = windowWidth < 480 ? 10 : 15;
+            coin.style.left = `${carLeft + Math.random() * randomSpread}%`;
             coin.style.bottom = '18%';
             el.floatingCoins.appendChild(coin);
             setTimeout(() => coin.remove(), 1500);
