@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Pomo Drive ~ Chill & Focus</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,7 +37,7 @@
             --night-bottom: #7b4b94;
 
             /* UI Colors */
-            --card-bg: rgba(255, 255, 255, 0.92);
+            --card-bg: rgba(255, 255, 255, 0.95);
             --card-border: rgba(255, 143, 171, 0.4);
             --text-primary: #5c4158;
             --text-secondary: #8b7086;
@@ -51,6 +51,13 @@
             --transition-fast: 0.15s ease;
             --transition-medium: 0.3s ease;
             --transition-slow: 0.5s ease;
+
+            /* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
         }
 
         [data-theme="night"] {
@@ -77,15 +84,17 @@
         }
 
         body {
-            font-family: 'Quicksand', sans-serif;
+            font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, sans-serif;
             background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 50%, var(--sky-bottom) 100%);
             transition: background var(--transition-slow);
-            image-rendering: pixelated;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* ===== Pixel Font for Game Elements ===== */
+        /* ===== Pixel Font ===== */
         .pixel-font {
-            font-family: 'Press Start 2P', cursive;
+            font-family: 'Press Start 2P', monospace;
+            letter-spacing: -1px;
         }
 
         /* ===== Game Container ===== */
@@ -93,9 +102,10 @@
             position: relative;
             width: 100%;
             height: 100vh;
+            height: 100dvh;
             overflow: hidden;
             opacity: 0;
-            animation: fadeIn 1s ease forwards;
+            animation: fadeIn 0.8s ease forwards;
         }
 
         @keyframes fadeIn {
@@ -107,14 +117,14 @@
             position: absolute;
             left: 0;
             width: 200%;
-            background-repeat: repeat-x;
             image-rendering: pixelated;
+            image-rendering: crisp-edges;
         }
 
         /* Stars Layer (Night only) */
         .stars-layer {
             top: 0;
-            height: 40%;
+            height: 50%;
             opacity: 0;
             transition: opacity var(--transition-slow);
         }
@@ -126,110 +136,158 @@
         /* Clouds Layer */
         .clouds-layer {
             top: 5%;
-            height: 25%;
-            animation: parallax-slow 120s linear infinite;
+            height: 20%;
+            animation: parallax-clouds 100s linear infinite;
         }
 
-        /* Mountains Layer */
-        .mountains-layer {
-            bottom: 35%;
-            height: 30%;
-            animation: parallax-medium 80s linear infinite;
+        /* Hills/Bubbles Layer */
+        .hills-layer {
+            bottom: 25%;
+            height: 35%;
+            animation: parallax-hills 60s linear infinite;
         }
 
-        /* City/Buildings Layer */
+        /* Buildings Layer */
         .buildings-layer {
-            bottom: 20%;
-            height: 25%;
-            animation: parallax-fast 40s linear infinite;
+            bottom: 18%;
+            height: 30%;
+            animation: parallax-buildings 35s linear infinite;
         }
 
-        /* Ground/Road Layer */
+        /* Ground Layer */
         .ground-layer {
             bottom: 0;
-            height: 22%;
+            height: 20%;
+            width: 100%;
         }
 
-        /* Road markings animation */
-        .road-markings {
-            position: absolute;
-            bottom: 8%;
-            left: 0;
-            width: 200%;
-            height: 4px;
-            animation: road-move 2s linear infinite;
+        @keyframes parallax-clouds {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
         }
 
-        @keyframes parallax-slow {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+        @keyframes parallax-hills {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
         }
 
-        @keyframes parallax-medium {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        @keyframes parallax-fast {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        @keyframes road-move {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-100px); }
+        @keyframes parallax-buildings {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
         }
 
         /* Pause animations when not driving */
-        .game-container:not(.driving) .clouds-layer {
-            animation-play-state: paused;
-        }
-        .game-container:not(.driving) .mountains-layer {
-            animation-play-state: paused;
-        }
+        .game-container:not(.driving) .clouds-layer,
+        .game-container:not(.driving) .hills-layer,
         .game-container:not(.driving) .buildings-layer {
             animation-play-state: paused;
         }
-        .game-container:not(.driving) .road-markings {
-            animation-play-state: paused;
-        }
 
-        /* ===== Pixel Art Sun/Moon ===== */
+        /* ===== Celestial Body ===== */
         .celestial {
             position: absolute;
             top: 8%;
-            right: 15%;
-            width: 60px;
-            height: 60px;
+            right: 12%;
+            width: 64px;
+            height: 64px;
             transition: all var(--transition-slow);
         }
 
-        /* ===== Car ===== */
+        /* ===== Car System ===== */
         .car-container {
             position: absolute;
-            bottom: 12%;
-            left: 20%;
+            bottom: 14%;
+            left: 15%;
             z-index: 50;
-            transition: transform var(--transition-medium);
         }
 
-        .car {
-            width: 120px;
-            height: 60px;
+        .car-wrapper {
             position: relative;
-            transition: filter var(--transition-medium);
+            width: 100px;
+            height: 50px;
         }
 
-        .car.driving {
-            animation: car-bounce 0.3s ease-in-out infinite;
+        .car-body {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .car-wrapper.driving .car-body {
+            animation: car-bounce 0.25s ease-in-out infinite;
         }
 
         @keyframes car-bounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-3px); }
+            50% { transform: translateY(-2px); }
         }
 
-        /* ===== Coins Floating Animation ===== */
+        /* Wheels */
+        .wheel {
+            position: absolute;
+            bottom: -2px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #5c4158;
+            border: 3px solid #8b7a96;
+        }
+
+        .wheel-front { left: 12px; }
+        .wheel-back { right: 12px; }
+
+        .wheel-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            background: #b8a5b3;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .wheel-spoke {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: #8b7a96;
+            transform-origin: center center;
+        }
+
+        .car-wrapper.driving .wheel {
+            animation: wheel-spin 0.3s linear infinite;
+        }
+
+        @keyframes wheel-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Exhaust Particles */
+        .exhaust-container {
+            position: absolute;
+            left: -30px;
+            bottom: 5px;
+            width: 40px;
+            height: 30px;
+            pointer-events: none;
+            overflow: visible;
+        }
+
+        .exhaust-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.7);
+            pointer-events: none;
+            will-change: transform, opacity;
+        }
+
+        /* ===== Floating Coins ===== */
         .floating-coins {
             position: absolute;
             top: 0;
@@ -238,24 +296,19 @@
             height: 100%;
             pointer-events: none;
             z-index: 60;
+            overflow: hidden;
         }
 
         .floating-coin {
             position: absolute;
-            font-size: 24px;
-            animation: coin-float 2s ease-out forwards;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            font-size: 20px;
+            animation: coin-float 1.5s ease-out forwards;
+            will-change: transform, opacity;
         }
 
         @keyframes coin-float {
-            0% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-100px) scale(1.5);
-            }
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-80px) scale(1.3); }
         }
 
         /* ===== Main UI Card ===== */
@@ -266,34 +319,35 @@
             transform: translate(-50%, -50%);
             background: var(--card-bg);
             border: 3px solid var(--card-border);
-            border-radius: 24px;
-            padding: 32px 40px;
+            border-radius: 20px;
+            padding: var(--space-lg);
             text-align: center;
             box-shadow:
-                0 10px 40px rgba(255, 92, 141, 0.2),
-                0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+                0 8px 32px rgba(255, 92, 141, 0.15),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(10px);
             z-index: 100;
-            min-width: 340px;
-            transition: background var(--transition-slow), border-color var(--transition-slow);
+            width: 320px;
+            max-width: 90vw;
+            transition: all var(--transition-slow);
         }
 
-        /* Cute decorative bow */
         .ui-card::before {
             content: '🎀';
             position: absolute;
-            top: -15px;
+            top: -14px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 28px;
+            font-size: 24px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
         }
 
-        /* ===== Top Bar (Coins & Settings) ===== */
+        /* ===== Top Bar ===== */
         .top-bar {
             position: absolute;
-            top: 16px;
-            left: 16px;
-            right: 16px;
+            top: var(--space-md);
+            left: var(--space-md);
+            right: var(--space-md);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -303,17 +357,17 @@
         .coin-display {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: var(--space-sm);
             background: var(--card-bg);
-            padding: 10px 18px;
+            padding: var(--space-sm) var(--space-md);
             border-radius: 50px;
             border: 2px solid var(--coin-gold);
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.25);
         }
 
         .coin-icon {
-            font-size: 20px;
-            animation: coin-spin 3s ease-in-out infinite;
+            font-size: 18px;
+            animation: coin-spin 2.5s ease-in-out infinite;
         }
 
         @keyframes coin-spin {
@@ -322,52 +376,51 @@
         }
 
         .coin-count {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 14px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 12px;
             color: var(--text-primary);
+            min-width: 24px;
         }
 
         .top-buttons {
             display: flex;
-            gap: 10px;
+            gap: var(--space-sm);
         }
 
         .icon-btn {
-            width: 44px;
-            height: 44px;
-            border: none;
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--card-border);
             background: var(--card-bg);
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
             transition: transform var(--transition-fast), box-shadow var(--transition-medium);
-            border: 2px solid var(--card-border);
         }
 
         .icon-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            transform: scale(1.08);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
         }
 
         .icon-btn:active {
             transform: scale(0.95);
         }
 
-        /* ===== Mode Indicator ===== */
+        /* ===== Mode Badge ===== */
         .mode-badge {
             display: inline-block;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 11px;
+            padding: var(--space-xs) var(--space-md);
+            border-radius: 16px;
+            font-size: 10px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
-            transition: all var(--transition-medium);
+            letter-spacing: 1.5px;
+            margin-bottom: var(--space-xs);
         }
 
         .mode-badge.work {
@@ -381,20 +434,19 @@
         }
 
         .session-info {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-secondary);
-            margin-bottom: 20px;
+            margin-bottom: var(--space-md);
         }
 
         /* ===== Timer Display ===== */
         .timer-wrapper {
-            position: relative;
-            margin: 20px auto;
+            margin: var(--space-md) auto;
         }
 
         .timer-ring {
-            width: 200px;
-            height: 200px;
+            width: 180px;
+            height: 180px;
             margin: 0 auto;
             position: relative;
         }
@@ -408,13 +460,13 @@
         .timer-ring-bg {
             fill: none;
             stroke: var(--pink-light);
-            stroke-width: 8;
+            stroke-width: 6;
         }
 
         .timer-ring-progress {
             fill: none;
             stroke: url(#timerGradient);
-            stroke-width: 8;
+            stroke-width: 6;
             stroke-linecap: round;
             transition: stroke-dashoffset 0.5s ease;
         }
@@ -425,13 +477,15 @@
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
+            width: 100%;
         }
 
         .timer-time {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 32px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 28px;
             color: var(--text-primary);
             text-shadow: 2px 2px 0 var(--pink-light);
+            letter-spacing: -2px;
         }
 
         .timer-time.running {
@@ -439,37 +493,38 @@
         }
 
         @keyframes timer-pulse {
-            0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.02); }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
 
         .timer-label {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-muted);
-            margin-top: 8px;
+            margin-top: var(--space-sm);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
         }
 
         /* ===== Control Buttons ===== */
         .controls {
             display: flex;
-            gap: 12px;
+            gap: var(--space-sm);
             justify-content: center;
-            margin: 24px 0 20px;
+            margin: var(--space-lg) 0 var(--space-md);
+            flex-wrap: wrap;
         }
 
         .btn {
             font-family: 'Quicksand', sans-serif;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
-            padding: 12px 24px;
+            padding: 10px 20px;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             transition: all var(--transition-fast);
             position: relative;
-            overflow: hidden;
+            white-space: nowrap;
         }
 
         .btn::after {
@@ -479,7 +534,7 @@
             left: 0;
             right: 0;
             height: 50%;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+            background: linear-gradient(to bottom, rgba(255,255,255,0.25), transparent);
             border-radius: 50px 50px 0 0;
             pointer-events: none;
         }
@@ -487,25 +542,26 @@
         .btn-primary {
             background: linear-gradient(135deg, var(--pink-main), var(--pink-deep));
             color: white;
-            box-shadow: 0 4px 15px rgba(255, 92, 141, 0.4);
+            box-shadow: 0 4px 12px rgba(255, 92, 141, 0.35);
+            min-width: 100px;
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 92, 141, 0.5);
+            box-shadow: 0 6px 16px rgba(255, 92, 141, 0.45);
         }
 
-        .btn-primary:active {
+        .btn-primary:active:not(:disabled) {
             transform: translateY(0) scale(0.98);
         }
 
         .btn-secondary {
             background: var(--lavender);
             color: var(--text-primary);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
         }
 
-        .btn-secondary:hover {
+        .btn-secondary:hover:not(:disabled) {
             background: var(--purple);
             color: white;
             transform: translateY(-2px);
@@ -514,15 +570,14 @@
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            transform: none !important;
         }
 
         /* ===== Stats Row ===== */
         .stats-row {
             display: flex;
             justify-content: center;
-            gap: 24px;
-            padding-top: 16px;
+            gap: var(--space-xl);
+            padding-top: var(--space-md);
             border-top: 2px dashed var(--pink-light);
         }
 
@@ -531,32 +586,29 @@
         }
 
         .stat-value {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 18px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 16px;
             color: var(--pink-deep);
         }
 
         .stat-label {
-            font-size: 10px;
+            font-size: 9px;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 4px;
+            letter-spacing: 0.5px;
+            margin-top: var(--space-xs);
         }
 
-        /* ===== Shop Panel ===== */
+        /* ===== Panel Styles ===== */
         .panel-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            inset: 0;
             background: rgba(93, 65, 88, 0.6);
             opacity: 0;
             visibility: hidden;
             transition: all var(--transition-medium);
             z-index: 200;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(4px);
         }
 
         .panel-overlay.open {
@@ -571,17 +623,17 @@
             transform: translate(-50%, -50%) scale(0.9);
             background: var(--card-bg);
             border: 3px solid var(--card-border);
-            border-radius: 24px;
-            padding: 32px;
-            max-width: 420px;
-            width: 90%;
-            max-height: 80vh;
+            border-radius: 20px;
+            padding: var(--space-lg);
+            width: 380px;
+            max-width: 92vw;
+            max-height: 85vh;
             overflow-y: auto;
             opacity: 0;
             visibility: hidden;
             transition: all var(--transition-medium);
             z-index: 201;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
         }
 
         .shop-panel.open, .settings-panel.open {
@@ -594,25 +646,25 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-md);
             border-bottom: 2px dashed var(--pink-light);
         }
 
         .panel-title {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 16px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 14px;
             color: var(--text-primary);
         }
 
         .close-btn {
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border: none;
             background: var(--pink-light);
             border-radius: 50%;
             cursor: pointer;
-            font-size: 18px;
+            font-size: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -625,108 +677,101 @@
             transform: rotate(90deg);
         }
 
-        /* Shop Items */
+        /* Shop Sections */
         .shop-section {
-            margin-bottom: 24px;
+            margin-bottom: var(--space-lg);
         }
 
         .shop-section-title {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--text-secondary);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            margin-bottom: var(--space-sm);
         }
 
-        .car-grid {
+        .item-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: var(--space-sm);
         }
 
-        .car-option {
+        .shop-item {
             background: var(--lavender);
             border: 3px solid transparent;
-            border-radius: 16px;
-            padding: 16px 12px;
+            border-radius: 12px;
+            padding: var(--space-sm);
             text-align: center;
             cursor: pointer;
             transition: all var(--transition-fast);
             position: relative;
         }
 
-        .car-option:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        .shop-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
         }
 
-        .car-option.selected {
+        .shop-item.selected {
             border-color: var(--pink-deep);
             background: var(--pink-light);
         }
 
-        .car-option.locked {
-            opacity: 0.6;
-            cursor: not-allowed;
+        .shop-item.locked {
+            opacity: 0.55;
         }
 
-        .car-option.locked::after {
+        .shop-item.locked::after {
             content: '🔒';
             position: absolute;
-            top: 8px;
-            right: 8px;
-            font-size: 14px;
-        }
-
-        .car-preview {
-            font-size: 32px;
-            margin-bottom: 8px;
-        }
-
-        .car-name {
+            top: 4px;
+            right: 4px;
             font-size: 10px;
+        }
+
+        .item-preview {
+            font-size: 24px;
+            margin-bottom: 4px;
+            line-height: 1;
+        }
+
+        .item-name {
+            font-size: 8px;
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
-        .car-price {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 10px;
+        .item-price {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 8px;
             color: var(--coin-gold);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
         }
 
-        .car-price.owned {
+        .item-price.owned {
             color: var(--cyan-dark);
         }
 
-        /* ===== Settings Panel ===== */
+        /* Settings Sections */
         .settings-section {
-            margin-bottom: 20px;
+            margin-bottom: var(--space-md);
         }
 
         .settings-section-title {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--text-secondary);
-            margin-bottom: 12px;
+            margin-bottom: var(--space-sm);
         }
 
         .setting-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
+            padding: var(--space-sm) 0;
             border-bottom: 1px solid var(--pink-light);
         }
 
@@ -735,21 +780,20 @@
         }
 
         .setting-label {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-primary);
         }
 
         .setting-input {
-            width: 70px;
-            padding: 8px 10px;
+            width: 60px;
+            padding: 6px 8px;
             border: 2px solid var(--pink-light);
-            border-radius: 10px;
+            border-radius: 8px;
             background: white;
             color: var(--text-primary);
             font-family: inherit;
-            font-size: 14px;
+            font-size: 13px;
             text-align: center;
-            transition: border-color var(--transition-medium);
         }
 
         .setting-input:focus {
@@ -757,15 +801,15 @@
             border-color: var(--pink-main);
         }
 
-        /* Toggle Switch */
+        /* Toggle */
         .toggle {
             position: relative;
-            width: 52px;
-            height: 28px;
+            width: 48px;
+            height: 26px;
             background: var(--lavender);
-            border-radius: 14px;
+            border-radius: 13px;
             cursor: pointer;
-            transition: background-color var(--transition-medium);
+            transition: background var(--transition-medium);
         }
 
         .toggle.active {
@@ -777,53 +821,51 @@
             position: absolute;
             top: 3px;
             left: 3px;
-            width: 22px;
-            height: 22px;
+            width: 20px;
+            height: 20px;
             background: white;
             border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
             transition: transform var(--transition-medium);
         }
 
         .toggle.active::after {
-            transform: translateX(24px);
+            transform: translateX(22px);
         }
 
-        /* Range Slider */
+        /* Slider */
         .setting-slider {
             -webkit-appearance: none;
-            appearance: none;
-            width: 100px;
-            height: 8px;
+            width: 90px;
+            height: 6px;
             background: var(--lavender);
-            border-radius: 4px;
+            border-radius: 3px;
             outline: none;
         }
 
         .setting-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             background: linear-gradient(135deg, var(--pink-main), var(--pink-deep));
             border-radius: 50%;
             cursor: pointer;
             box-shadow: 0 2px 6px rgba(255, 92, 141, 0.4);
         }
 
-        /* Theme Toggle */
+        /* Theme Buttons */
         .theme-toggle {
             display: flex;
-            gap: 8px;
+            gap: 6px;
         }
 
         .theme-btn {
-            padding: 8px 14px;
+            padding: 6px 12px;
             border: 2px solid var(--pink-light);
-            border-radius: 10px;
+            border-radius: 8px;
             background: white;
             font-family: inherit;
-            font-size: 12px;
+            font-size: 11px;
             cursor: pointer;
             transition: all var(--transition-fast);
         }
@@ -838,9 +880,9 @@
         .settings-actions {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-top: 20px;
-            padding-top: 16px;
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+            padding-top: var(--space-md);
             border-top: 2px dashed var(--pink-light);
         }
 
@@ -848,6 +890,7 @@
             background: transparent;
             border: 2px solid var(--pink-deep);
             color: var(--pink-deep);
+            box-shadow: none;
         }
 
         .btn-danger:hover {
@@ -855,24 +898,27 @@
             color: white;
         }
 
-        /* ===== Toast Notification ===== */
+        /* ===== Toast ===== */
         .toast {
             position: fixed;
-            bottom: 100px;
+            bottom: 80px;
             left: 50%;
-            transform: translateX(-50%) translateY(50px);
+            transform: translateX(-50%) translateY(40px);
             background: var(--card-bg);
             color: var(--text-primary);
-            padding: 14px 24px;
+            padding: 12px 20px;
             border-radius: 50px;
             border: 2px solid var(--pink-main);
-            box-shadow: 0 8px 32px rgba(255, 92, 141, 0.3);
-            font-size: 14px;
+            box-shadow: 0 6px 24px rgba(255, 92, 141, 0.25);
+            font-size: 13px;
             font-weight: 500;
             opacity: 0;
             visibility: hidden;
             transition: all var(--transition-medium);
             z-index: 300;
+            white-space: nowrap;
+            max-width: 90vw;
+            text-align: center;
         }
 
         .toast.show {
@@ -881,96 +927,35 @@
             visibility: visible;
         }
 
-        /* ===== Work Mode Overlay ===== */
+        /* ===== Work Overlay ===== */
         .work-overlay {
             position: fixed;
-            bottom: 16px;
+            bottom: var(--space-md);
             left: 50%;
             transform: translateX(-50%);
             background: var(--card-bg);
-            padding: 10px 20px;
-            border-radius: 20px;
+            padding: var(--space-sm) var(--space-md);
+            border-radius: 16px;
             border: 2px solid var(--pink-light);
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-secondary);
             z-index: 90;
             opacity: 0;
             transition: opacity var(--transition-medium);
             pointer-events: none;
+            white-space: nowrap;
         }
 
         .work-overlay.show {
             opacity: 1;
         }
 
-        /* ===== Mobile Responsive ===== */
-        @media (max-width: 480px) {
-            .ui-card {
-                min-width: auto;
-                width: 90%;
-                padding: 24px 20px;
-            }
-
-            .timer-ring {
-                width: 160px;
-                height: 160px;
-            }
-
-            .timer-time {
-                font-size: 24px;
-            }
-
-            .controls {
-                flex-wrap: wrap;
-            }
-
-            .btn {
-                padding: 10px 18px;
-                font-size: 13px;
-            }
-
-            .car-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .car-container {
-                left: 10%;
-            }
-
-            .car {
-                width: 80px;
-                height: 40px;
-            }
-        }
-
-        /* ===== Cute Sparkle Effect ===== */
-        @keyframes sparkle {
-            0%, 100% { opacity: 0; transform: scale(0); }
-            50% { opacity: 1; transform: scale(1); }
-        }
-
-        .sparkle {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            pointer-events: none;
-        }
-
-        .sparkle::before {
-            content: '✨';
-            font-size: 16px;
-            animation: sparkle 1.5s ease-in-out infinite;
-        }
-
-        /* ===== Break Mode Glow ===== */
+        /* ===== Break Glow ===== */
         .break-glow {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            inset: 0;
             pointer-events: none;
-            background: radial-gradient(ellipse at center, rgba(181, 234, 215, 0.2) 0%, transparent 70%);
+            background: radial-gradient(ellipse at center, rgba(181, 234, 215, 0.15) 0%, transparent 60%);
             opacity: 0;
             transition: opacity var(--transition-slow);
             z-index: 5;
@@ -980,19 +965,120 @@
             opacity: 1;
         }
 
-        /* ===== Custom Scrollbar ===== */
+        /* ===== Responsive Design ===== */
+        @media (max-width: 480px) {
+            :root {
+                --space-lg: 20px;
+                --space-xl: 24px;
+            }
+
+            .ui-card {
+                width: 300px;
+                padding: var(--space-md);
+            }
+
+            .timer-ring {
+                width: 150px;
+                height: 150px;
+            }
+
+            .timer-time {
+                font-size: 22px;
+            }
+
+            .btn {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+
+            .controls {
+                gap: 6px;
+            }
+
+            .car-wrapper {
+                width: 80px;
+                height: 40px;
+            }
+
+            .wheel {
+                width: 14px;
+                height: 14px;
+            }
+
+            .wheel-front { left: 8px; }
+            .wheel-back { right: 8px; }
+
+            .item-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stat-value {
+                font-size: 14px;
+            }
+
+            .stats-row {
+                gap: var(--space-lg);
+            }
+        }
+
+        @media (max-width: 360px) {
+            .ui-card {
+                width: 280px;
+            }
+
+            .timer-ring {
+                width: 130px;
+                height: 130px;
+            }
+
+            .timer-time {
+                font-size: 20px;
+            }
+
+            .panel-title {
+                font-size: 12px;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .ui-card {
+                width: 360px;
+                padding: var(--space-xl);
+            }
+
+            .timer-ring {
+                width: 200px;
+                height: 200px;
+            }
+
+            .timer-time {
+                font-size: 32px;
+            }
+
+            .car-wrapper {
+                width: 120px;
+                height: 60px;
+            }
+
+            .wheel {
+                width: 22px;
+                height: 22px;
+            }
+        }
+
+        /* ===== Scrollbar ===== */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
 
         ::-webkit-scrollbar-track {
             background: var(--pink-light);
-            border-radius: 4px;
+            border-radius: 3px;
         }
 
         ::-webkit-scrollbar-thumb {
             background: var(--pink-main);
-            border-radius: 4px;
+            border-radius: 3px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
@@ -1016,25 +1102,34 @@
             </defs>
         </svg>
 
-        <!-- Break Mode Glow -->
+        <!-- Break Glow -->
         <div class="break-glow" id="breakGlow"></div>
 
-        <!-- Parallax Background Layers -->
+        <!-- Parallax Layers -->
         <canvas class="parallax-layer stars-layer" id="starsCanvas"></canvas>
         <canvas class="parallax-layer clouds-layer" id="cloudsCanvas"></canvas>
-        <canvas class="parallax-layer mountains-layer" id="mountainsCanvas"></canvas>
+        <canvas class="parallax-layer hills-layer" id="hillsCanvas"></canvas>
         <canvas class="parallax-layer buildings-layer" id="buildingsCanvas"></canvas>
         <canvas class="parallax-layer ground-layer" id="groundCanvas"></canvas>
 
-        <!-- Celestial Body (Sun/Moon) -->
-        <canvas class="celestial" id="celestialCanvas" width="60" height="60"></canvas>
+        <!-- Celestial Body -->
+        <canvas class="celestial" id="celestialCanvas" width="64" height="64"></canvas>
 
-        <!-- Floating Coins Container -->
+        <!-- Floating Coins -->
         <div class="floating-coins" id="floatingCoins"></div>
 
         <!-- Car -->
         <div class="car-container" id="carContainer">
-            <canvas class="car" id="carCanvas" width="120" height="60"></canvas>
+            <div class="exhaust-container" id="exhaustContainer"></div>
+            <div class="car-wrapper" id="carWrapper">
+                <canvas class="car-body" id="carCanvas" width="100" height="50"></canvas>
+                <div class="wheel wheel-front" id="wheelFront">
+                    <div class="wheel-inner"></div>
+                </div>
+                <div class="wheel wheel-back" id="wheelBack">
+                    <div class="wheel-inner"></div>
+                </div>
+            </div>
         </div>
 
         <!-- Top Bar -->
@@ -1085,38 +1180,41 @@
             </div>
         </div>
 
-        <!-- Work Mode Overlay Message -->
+        <!-- Work Overlay -->
         <div class="work-overlay" id="workOverlay">
-            🚗 Car is driving... Focus on your work! 💪
+            🚗 Driving... Focus on work! 💪
         </div>
     </div>
 
-    <!-- Shop Panel Overlay -->
+    <!-- Shop Overlay -->
     <div class="panel-overlay" id="shopOverlay"></div>
 
     <!-- Shop Panel -->
     <div class="shop-panel" id="shopPanel">
         <div class="panel-header">
-            <h2 class="panel-title">🛒 Car Shop</h2>
+            <h2 class="panel-title">🛒 Shop</h2>
             <button class="close-btn" id="closeShopBtn">✕</button>
         </div>
 
         <div class="shop-section">
-            <div class="shop-section-title">🚗 Choose Your Ride</div>
-            <div class="car-grid" id="carGrid">
-                <!-- Cars will be populated by JS -->
-            </div>
+            <div class="shop-section-title">🚗 Cars</div>
+            <div class="item-grid" id="carGrid"></div>
         </div>
 
         <div class="shop-section">
-            <div class="shop-section-title">💡 How to Earn Coins</div>
-            <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.6;">
-                Complete work sessions and enjoy your breaks! You earn <strong>+1 coin</strong> every few seconds during break time. The longer you rest, the more coins you collect! 🪙✨
+            <div class="shop-section-title">🛞 Wheels</div>
+            <div class="item-grid" id="wheelGrid"></div>
+        </div>
+
+        <div class="shop-section">
+            <div class="shop-section-title">💡 Earn Coins</div>
+            <p style="font-size: 11px; color: var(--text-secondary); line-height: 1.5;">
+                Earn <strong>+1 coin</strong> every 3 seconds during breaks! 🪙
             </p>
         </div>
     </div>
 
-    <!-- Settings Panel Overlay -->
+    <!-- Settings Overlay -->
     <div class="panel-overlay" id="settingsOverlay"></div>
 
     <!-- Settings Panel -->
@@ -1127,9 +1225,9 @@
         </div>
 
         <div class="settings-section">
-            <div class="settings-section-title">⏱️ Timer (minutes)</div>
+            <div class="settings-section-title">⏱️ Timer (min)</div>
             <div class="setting-item">
-                <span class="setting-label">Work Session</span>
+                <span class="setting-label">Work</span>
                 <input type="number" class="setting-input" id="workDuration" min="1" max="60" value="25">
             </div>
             <div class="setting-item">
@@ -1141,7 +1239,7 @@
                 <input type="number" class="setting-input" id="longBreakDuration" min="1" max="60" value="15">
             </div>
             <div class="setting-item">
-                <span class="setting-label">Sessions until Long Break</span>
+                <span class="setting-label">Sessions</span>
                 <input type="number" class="setting-input" id="sessionsUntilLong" min="1" max="10" value="4">
             </div>
         </div>
@@ -1149,69 +1247,68 @@
         <div class="settings-section">
             <div class="settings-section-title">🔄 Auto-Start</div>
             <div class="setting-item">
-                <span class="setting-label">Auto-start Breaks</span>
+                <span class="setting-label">Breaks</span>
                 <div class="toggle" id="autoStartBreaks"></div>
             </div>
             <div class="setting-item">
-                <span class="setting-label">Auto-start Work</span>
+                <span class="setting-label">Work</span>
                 <div class="toggle" id="autoStartWork"></div>
             </div>
         </div>
 
         <div class="settings-section">
-            <div class="settings-section-title">🔔 Notifications</div>
+            <div class="settings-section-title">🔔 Sound</div>
             <div class="setting-item">
-                <span class="setting-label">Sound</span>
+                <span class="setting-label">Enabled</span>
                 <div class="toggle active" id="soundEnabled"></div>
             </div>
             <div class="setting-item">
                 <span class="setting-label">Volume</span>
                 <input type="range" class="setting-slider" id="volumeSlider" min="0" max="100" value="70">
             </div>
-            <div class="setting-item">
-                <span class="setting-label">Browser Notifications</span>
-                <div class="toggle" id="browserNotifications"></div>
-            </div>
         </div>
 
         <div class="settings-section">
             <div class="settings-section-title">🎨 Theme</div>
             <div class="setting-item">
-                <span class="setting-label">Time of Day</span>
+                <span class="setting-label">Mode</span>
                 <div class="theme-toggle">
-                    <button class="theme-btn active" data-theme="day">☀️ Day</button>
-                    <button class="theme-btn" data-theme="night">🌙 Night</button>
+                    <button class="theme-btn active" data-theme="day">☀️</button>
+                    <button class="theme-btn" data-theme="night">🌙</button>
                 </div>
             </div>
         </div>
 
         <div class="settings-actions">
-            <button class="btn btn-secondary" id="resetDefaults">Reset to Defaults</button>
+            <button class="btn btn-secondary" id="resetDefaults">Reset Defaults</button>
             <button class="btn btn-danger" id="clearAllData">Clear All Data</button>
         </div>
     </div>
 
-    <!-- Toast Notification -->
+    <!-- Toast -->
     <div class="toast" id="toast"></div>
 
     <script>
         // ===== Application State =====
         const state = {
-            // Timer state
             isRunning: false,
             isPaused: false,
             timeRemaining: 25 * 60,
             totalTime: 25 * 60,
             currentMode: 'work',
             currentSession: 1,
-            completedPomodoros: 0,
             timerInterval: null,
             coinInterval: null,
+            exhaustInterval: null,
+            particlePool: [],
+            activeParticles: [],
 
             // Game state
             coins: 0,
             selectedCar: 'pink',
+            selectedWheel: 'standard',
             ownedCars: ['pink'],
+            ownedWheels: ['standard'],
 
             // Settings
             settings: {
@@ -1223,11 +1320,9 @@
                 autoStartWork: false,
                 soundEnabled: true,
                 volume: 70,
-                browserNotifications: false,
                 theme: 'day'
             },
 
-            // Statistics
             stats: {
                 today: 0,
                 totalCoins: 0,
@@ -1235,18 +1330,27 @@
             }
         };
 
-        // ===== Car Definitions =====
+        // ===== Item Definitions =====
         const CARS = [
-            { id: 'pink', name: 'Pinky', price: 0, emoji: '🚗', colors: { body: '#ff8fab', window: '#7fefef', wheel: '#5c4158' } },
-            { id: 'lavender', name: 'Dreamy', price: 50, emoji: '🚙', colors: { body: '#c792ea', window: '#ffd6e0', wheel: '#5c4158' } },
-            { id: 'mint', name: 'Minty', price: 100, emoji: '🚕', colors: { body: '#b5ead7', window: '#fff3b0', wheel: '#5c4158' } },
-            { id: 'peach', name: 'Peachy', price: 150, emoji: '🛻', colors: { body: '#ffb5a7', window: '#7fefef', wheel: '#5c4158' } },
-            { id: 'cyan', name: 'Ocean', price: 200, emoji: '🚐', colors: { body: '#7fefef', window: '#ffd6e0', wheel: '#5c4158' } },
-            { id: 'gold', name: 'Luxe', price: 500, emoji: '🏎️', colors: { body: '#ffd700', window: '#ff8fab', wheel: '#5c4158' } }
+            { id: 'pink', name: 'Pinky', price: 0, emoji: '🚗', color: '#ff8fab' },
+            { id: 'lavender', name: 'Dreamy', price: 50, emoji: '🚙', color: '#c792ea' },
+            { id: 'mint', name: 'Minty', price: 100, emoji: '🚕', color: '#b5ead7' },
+            { id: 'peach', name: 'Peachy', price: 150, emoji: '🛻', color: '#ffb5a7' },
+            { id: 'cyan', name: 'Ocean', price: 200, emoji: '🚐', color: '#7fefef' },
+            { id: 'gold', name: 'Luxe', price: 500, emoji: '🏎️', color: '#ffd700' }
+        ];
+
+        const WHEELS = [
+            { id: 'standard', name: 'Standard', price: 0, color: '#5c4158', accent: '#8b7a96' },
+            { id: 'pink', name: 'Pink', price: 30, color: '#ff8fab', accent: '#ffd6e0' },
+            { id: 'gold', name: 'Gold', price: 80, color: '#ffd700', accent: '#fff3b0' },
+            { id: 'rainbow', name: 'Rainbow', price: 150, color: '#c792ea', accent: '#7fefef' },
+            { id: 'dark', name: 'Dark', price: 100, color: '#2d1b4e', accent: '#4a2c7a' },
+            { id: 'white', name: 'White', price: 60, color: '#f0e6f5', accent: '#ffffff' }
         ];
 
         // ===== DOM Elements =====
-        const elements = {
+        const el = {
             gameContainer: document.getElementById('gameContainer'),
             timerDisplay: document.getElementById('timerDisplay'),
             timerLabel: document.getElementById('timerLabel'),
@@ -1259,6 +1363,24 @@
             todayPomodoros: document.getElementById('todayPomodoros'),
             totalCoins: document.getElementById('totalCoins'),
             coinCount: document.getElementById('coinCount'),
+            breakGlow: document.getElementById('breakGlow'),
+            workOverlay: document.getElementById('workOverlay'),
+            floatingCoins: document.getElementById('floatingCoins'),
+            exhaustContainer: document.getElementById('exhaustContainer'),
+            carWrapper: document.getElementById('carWrapper'),
+            carCanvas: document.getElementById('carCanvas'),
+            wheelFront: document.getElementById('wheelFront'),
+            wheelBack: document.getElementById('wheelBack'),
+
+            // Canvases
+            starsCanvas: document.getElementById('starsCanvas'),
+            cloudsCanvas: document.getElementById('cloudsCanvas'),
+            hillsCanvas: document.getElementById('hillsCanvas'),
+            buildingsCanvas: document.getElementById('buildingsCanvas'),
+            groundCanvas: document.getElementById('groundCanvas'),
+            celestialCanvas: document.getElementById('celestialCanvas'),
+
+            // Panels
             shopBtn: document.getElementById('shopBtn'),
             settingsBtn: document.getElementById('settingsBtn'),
             shopPanel: document.getElementById('shopPanel'),
@@ -1268,21 +1390,10 @@
             settingsOverlay: document.getElementById('settingsOverlay'),
             closeSettingsBtn: document.getElementById('closeSettingsBtn'),
             carGrid: document.getElementById('carGrid'),
+            wheelGrid: document.getElementById('wheelGrid'),
             toast: document.getElementById('toast'),
-            breakGlow: document.getElementById('breakGlow'),
-            workOverlay: document.getElementById('workOverlay'),
-            floatingCoins: document.getElementById('floatingCoins'),
 
-            // Canvases
-            starsCanvas: document.getElementById('starsCanvas'),
-            cloudsCanvas: document.getElementById('cloudsCanvas'),
-            mountainsCanvas: document.getElementById('mountainsCanvas'),
-            buildingsCanvas: document.getElementById('buildingsCanvas'),
-            groundCanvas: document.getElementById('groundCanvas'),
-            celestialCanvas: document.getElementById('celestialCanvas'),
-            carCanvas: document.getElementById('carCanvas'),
-
-            // Settings inputs
+            // Settings
             workDuration: document.getElementById('workDuration'),
             shortBreakDuration: document.getElementById('shortBreakDuration'),
             longBreakDuration: document.getElementById('longBreakDuration'),
@@ -1291,582 +1402,585 @@
             autoStartWork: document.getElementById('autoStartWork'),
             soundEnabled: document.getElementById('soundEnabled'),
             volumeSlider: document.getElementById('volumeSlider'),
-            browserNotifications: document.getElementById('browserNotifications'),
             themeButtons: document.querySelectorAll('.theme-btn'),
             resetDefaults: document.getElementById('resetDefaults'),
             clearAllData: document.getElementById('clearAllData')
         };
 
-        // ===== Pixel Art Drawing Functions =====
+        // ===== Particle System with Object Pooling =====
+        const MAX_PARTICLES = 20;
 
-        // Draw pixel-style clouds
-        function drawClouds(canvas) {
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth * 2;
-            canvas.height = window.innerHeight * 0.25;
-            ctx.imageSmoothingEnabled = false;
-
-            const pixelSize = 8;
-            const cloudColor = state.settings.theme === 'night' ? 'rgba(199, 146, 234, 0.4)' : 'rgba(255, 255, 255, 0.9)';
-
-            // Cloud pattern
-            const clouds = [
-                { x: 100, y: 40, size: 1 },
-                { x: 300, y: 60, size: 1.5 },
-                { x: 550, y: 30, size: 1.2 },
-                { x: 800, y: 70, size: 1 },
-                { x: 1000, y: 45, size: 1.3 },
-                { x: 1250, y: 55, size: 1.1 },
-                { x: 1500, y: 35, size: 1.4 },
-                { x: 1750, y: 65, size: 1 },
-            ];
-
-            clouds.forEach(cloud => {
-                drawPixelCloud(ctx, cloud.x, cloud.y, cloud.size, pixelSize, cloudColor);
-            });
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'exhaust-particle';
+            particle.style.display = 'none';
+            return particle;
         }
 
-        function drawPixelCloud(ctx, x, y, scale, pixelSize, color) {
-            ctx.fillStyle = color;
-            const pattern = [
-                [0,0,1,1,1,0,0,0,0,1,1,0,0],
-                [0,1,1,1,1,1,0,1,1,1,1,1,0],
-                [1,1,1,1,1,1,1,1,1,1,1,1,1],
-                [1,1,1,1,1,1,1,1,1,1,1,1,1],
-                [0,1,1,1,1,1,1,1,1,1,1,1,0],
-            ];
-
-            pattern.forEach((row, py) => {
-                row.forEach((pixel, px) => {
-                    if (pixel) {
-                        ctx.fillRect(
-                            x + px * pixelSize * scale,
-                            y + py * pixelSize * scale,
-                            pixelSize * scale,
-                            pixelSize * scale
-                        );
-                    }
-                });
-            });
-        }
-
-        // Draw pixel mountains
-        function drawMountains(canvas) {
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth * 2;
-            canvas.height = window.innerHeight * 0.3;
-            ctx.imageSmoothingEnabled = false;
-
-            const baseColor = state.settings.theme === 'night' ? '#4a2c7a' : '#e2d1f9';
-            const shadowColor = state.settings.theme === 'night' ? '#2d1b4e' : '#c792ea';
-            const snowColor = state.settings.theme === 'night' ? '#9b6dff' : '#ffffff';
-
-            // Draw multiple mountain ranges
-            drawMountainRange(ctx, canvas.height, baseColor, shadowColor, snowColor, 0);
-            drawMountainRange(ctx, canvas.height * 0.8,
-                state.settings.theme === 'night' ? '#7b4b94' : '#ffd6e0',
-                state.settings.theme === 'night' ? '#4a2c7a' : '#ff8fab',
-                snowColor, canvas.width * 0.3);
-        }
-
-        function drawMountainRange(ctx, height, baseColor, shadowColor, snowColor, offset) {
-            const pixelSize = 6;
-            const peaks = [];
-
-            for (let i = 0; i < 15; i++) {
-                peaks.push({
-                    x: offset + i * 180 + Math.random() * 60,
-                    height: 80 + Math.random() * 100
-                });
+        function initParticlePool() {
+            for (let i = 0; i < MAX_PARTICLES; i++) {
+                const particle = createParticle();
+                el.exhaustContainer.appendChild(particle);
+                state.particlePool.push(particle);
             }
+        }
 
-            peaks.forEach(peak => {
-                // Mountain body
-                ctx.fillStyle = baseColor;
-                for (let y = 0; y < peak.height; y += pixelSize) {
-                    const width = (peak.height - y) * 1.2;
-                    ctx.fillRect(
-                        peak.x - width / 2,
-                        height - peak.height + y,
-                        width,
-                        pixelSize
-                    );
+        function getParticle() {
+            if (state.particlePool.length > 0) {
+                return state.particlePool.pop();
+            }
+            return null;
+        }
+
+        function returnParticle(particle) {
+            particle.style.display = 'none';
+            particle.style.transform = '';
+            particle.style.opacity = '';
+            const idx = state.activeParticles.indexOf(particle);
+            if (idx > -1) state.activeParticles.splice(idx, 1);
+            state.particlePool.push(particle);
+        }
+
+        function spawnExhaustParticle() {
+            const particle = getParticle();
+            if (!particle) return;
+
+            const size = 4 + Math.random() * 6;
+            const startX = Math.random() * 10;
+            const startY = 10 + Math.random() * 10;
+
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = startX + 'px';
+            particle.style.top = startY + 'px';
+            particle.style.display = 'block';
+            particle.style.opacity = '0.6';
+
+            state.activeParticles.push(particle);
+
+            let progress = 0;
+            const duration = 600 + Math.random() * 400;
+            const startTime = performance.now();
+            const targetX = -30 - Math.random() * 20;
+            const targetY = startY - 10 + Math.random() * 20;
+
+            function animate(currentTime) {
+                progress = (currentTime - startTime) / duration;
+
+                if (progress >= 1) {
+                    returnParticle(particle);
+                    return;
                 }
 
-                // Shadow side
-                ctx.fillStyle = shadowColor;
-                for (let y = 0; y < peak.height; y += pixelSize) {
-                    const width = (peak.height - y) * 0.6;
-                    ctx.fillRect(
-                        peak.x,
-                        height - peak.height + y,
-                        width,
-                        pixelSize
-                    );
-                }
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const x = startX + (targetX - startX) * easeOut;
+                const y = startY + (targetY - startY) * easeOut;
+                const scale = 1 + progress * 0.5;
+                const opacity = 0.6 * (1 - progress);
 
-                // Snow cap
-                ctx.fillStyle = snowColor;
-                for (let y = 0; y < peak.height * 0.25; y += pixelSize) {
-                    const width = (peak.height * 0.25 - y) * 1.2;
-                    ctx.fillRect(
-                        peak.x - width / 2,
-                        height - peak.height + y,
-                        width,
-                        pixelSize
-                    );
-                }
-            });
-        }
+                particle.style.transform = `translate(${x - startX}px, ${y - startY}px) scale(${scale})`;
+                particle.style.opacity = opacity;
 
-        // Draw pixel city/buildings
-        function drawBuildings(canvas) {
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth * 2;
-            canvas.height = window.innerHeight * 0.25;
-            ctx.imageSmoothingEnabled = false;
-
-            const pixelSize = 4;
-            const buildings = [];
-
-            // Generate buildings
-            for (let i = 0; i < 40; i++) {
-                buildings.push({
-                    x: i * 80 + Math.random() * 30,
-                    width: 40 + Math.random() * 40,
-                    height: 50 + Math.random() * 100,
-                    color: getRandomBuildingColor()
-                });
+                requestAnimationFrame(animate);
             }
 
-            buildings.forEach(building => {
-                drawPixelBuilding(ctx, building, pixelSize, canvas.height);
-            });
+            requestAnimationFrame(animate);
         }
 
-        function getRandomBuildingColor() {
-            const colors = state.settings.theme === 'night'
-                ? ['#2d1b4e', '#4a2c7a', '#7b4b94', '#9b6dff']
-                : ['#ffd6e0', '#ffb5a7', '#e2d1f9', '#b5ead7'];
-            return colors[Math.floor(Math.random() * colors.length)];
+        function startExhaust() {
+            if (state.exhaustInterval) return;
+            state.exhaustInterval = setInterval(spawnExhaustParticle, 150);
         }
 
-        function drawPixelBuilding(ctx, building, pixelSize, canvasHeight) {
-            // Main building
-            ctx.fillStyle = building.color;
-            for (let y = 0; y < building.height; y += pixelSize) {
-                ctx.fillRect(building.x, canvasHeight - building.height + y, building.width, pixelSize);
-            }
-
-            // Windows
-            const windowColor = state.settings.theme === 'night' ? '#fff3b0' : '#7fefef';
-            const windowOffColor = state.settings.theme === 'night' ? '#4a2c7a' : '#c792ea';
-
-            for (let wy = 10; wy < building.height - 15; wy += 20) {
-                for (let wx = 8; wx < building.width - 8; wx += 16) {
-                    ctx.fillStyle = Math.random() > 0.3 ? windowColor : windowOffColor;
-                    ctx.fillRect(
-                        building.x + wx,
-                        canvasHeight - building.height + wy,
-                        8,
-                        12
-                    );
-                }
+        function stopExhaust() {
+            if (state.exhaustInterval) {
+                clearInterval(state.exhaustInterval);
+                state.exhaustInterval = null;
             }
         }
 
-        // Draw ground/road
-        function drawGround(canvas) {
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight * 0.22;
-            ctx.imageSmoothingEnabled = false;
-
-            const pixelSize = 4;
-
-            // Grass
-            ctx.fillStyle = state.settings.theme === 'night' ? '#1d3d3a' : '#b5ead7';
-            ctx.fillRect(0, 0, canvas.width, canvas.height * 0.4);
-
-            // Road
-            ctx.fillStyle = state.settings.theme === 'night' ? '#2d1b4e' : '#e2d1f9';
-            ctx.fillRect(0, canvas.height * 0.3, canvas.width, canvas.height * 0.5);
-
-            // Road lines
-            ctx.fillStyle = state.settings.theme === 'night' ? '#9b6dff' : '#ffffff';
-            for (let x = 0; x < canvas.width; x += 60) {
-                ctx.fillRect(x, canvas.height * 0.52, 30, 6);
-            }
-
-            // Sidewalk
-            ctx.fillStyle = state.settings.theme === 'night' ? '#4a2c7a' : '#ffd6e0';
-            ctx.fillRect(0, canvas.height * 0.75, canvas.width, canvas.height * 0.25);
-
-            // Pixel flowers on grass
-            const flowerColors = ['#ff8fab', '#fff3b0', '#7fefef', '#c792ea'];
-            for (let i = 0; i < 30; i++) {
-                ctx.fillStyle = flowerColors[Math.floor(Math.random() * flowerColors.length)];
-                const fx = Math.random() * canvas.width;
-                const fy = Math.random() * canvas.height * 0.25;
-                ctx.fillRect(fx, fy, pixelSize, pixelSize);
-            }
-        }
-
-        // Draw stars (night mode)
+        // ===== Drawing Functions =====
         function drawStars(canvas) {
             const ctx = canvas.getContext('2d');
             canvas.width = window.innerWidth * 2;
-            canvas.height = window.innerHeight * 0.4;
-            ctx.imageSmoothingEnabled = false;
+            canvas.height = window.innerHeight * 0.5;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             ctx.fillStyle = '#ffffff';
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < 80; i++) {
                 const x = Math.random() * canvas.width;
                 const y = Math.random() * canvas.height;
                 const size = Math.random() > 0.8 ? 3 : 2;
                 ctx.fillRect(x, y, size, size);
             }
 
-            // Some twinkling stars (larger)
             ctx.fillStyle = '#fff3b0';
-            for (let i = 0; i < 20; i++) {
-                const x = Math.random() * canvas.width;
-                const y = Math.random() * canvas.height;
-                ctx.fillRect(x, y, 4, 4);
+            for (let i = 0; i < 15; i++) {
+                ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 4, 4);
             }
         }
 
-        // Draw sun/moon
-        function drawCelestial(canvas) {
+        function drawClouds(canvas) {
             const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, 60, 60);
+            canvas.width = window.innerWidth * 2;
+            canvas.height = window.innerHeight * 0.2;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.imageSmoothingEnabled = false;
 
-            const pixelSize = 4;
+            const isNight = state.settings.theme === 'night';
+            const cloudColor = isNight ? 'rgba(199, 146, 234, 0.5)' : 'rgba(255, 255, 255, 0.9)';
 
-            if (state.settings.theme === 'night') {
-                // Moon
-                ctx.fillStyle = '#fff3b0';
-                const moonPattern = [
-                    [0,0,0,1,1,1,1,0,0,0],
-                    [0,0,1,1,1,1,1,1,0,0],
-                    [0,1,1,1,1,1,0,0,0,0],
-                    [1,1,1,1,1,0,0,0,0,0],
-                    [1,1,1,1,1,0,0,0,0,0],
-                    [1,1,1,1,1,0,0,0,0,0],
-                    [1,1,1,1,1,1,0,0,0,0],
-                    [0,1,1,1,1,1,1,0,0,0],
-                    [0,0,1,1,1,1,1,1,0,0],
-                    [0,0,0,1,1,1,1,0,0,0],
-                ];
-                moonPattern.forEach((row, py) => {
-                    row.forEach((pixel, px) => {
-                        if (pixel) {
-                            ctx.fillRect(px * pixelSize + 10, py * pixelSize + 10, pixelSize, pixelSize);
-                        }
-                    });
+            const clouds = [];
+            for (let i = 0; i < 12; i++) {
+                clouds.push({
+                    x: i * (canvas.width / 6) + Math.random() * 100,
+                    y: 20 + Math.random() * (canvas.height - 60),
+                    scale: 0.8 + Math.random() * 0.6
                 });
-            } else {
-                // Sun
-                ctx.fillStyle = '#fff3b0';
-                // Sun rays
-                ctx.fillRect(28, 2, 4, 8);
-                ctx.fillRect(28, 50, 4, 8);
-                ctx.fillRect(2, 28, 8, 4);
-                ctx.fillRect(50, 28, 8, 4);
-                ctx.fillRect(10, 10, 6, 6);
-                ctx.fillRect(44, 10, 6, 6);
-                ctx.fillRect(10, 44, 6, 6);
-                ctx.fillRect(44, 44, 6, 6);
+            }
 
-                // Sun body
-                ctx.fillStyle = '#ffd700';
-                for (let y = 18; y < 42; y += pixelSize) {
-                    for (let x = 18; x < 42; x += pixelSize) {
-                        const dist = Math.sqrt(Math.pow(x - 30, 2) + Math.pow(y - 30, 2));
-                        if (dist < 14) {
-                            ctx.fillRect(x, y, pixelSize, pixelSize);
-                        }
+            clouds.forEach(cloud => {
+                drawPixelCloud(ctx, cloud.x, cloud.y, cloud.scale, cloudColor);
+            });
+        }
+
+        function drawPixelCloud(ctx, x, y, scale, color) {
+            ctx.fillStyle = color;
+            const ps = 6 * scale;
+
+            // Fluffy cloud shape using circles/rounded pixels
+            const pattern = [
+                [0,0,1,1,1,0,0,0,1,1,0,0],
+                [0,1,1,1,1,1,1,1,1,1,1,0],
+                [1,1,1,1,1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,1,1,1,1,1,1],
+                [0,1,1,1,1,1,1,1,1,1,1,0],
+                [0,0,1,1,1,1,1,1,1,1,0,0],
+            ];
+
+            pattern.forEach((row, py) => {
+                row.forEach((pixel, px) => {
+                    if (pixel) {
+                        ctx.beginPath();
+                        ctx.arc(x + px * ps + ps/2, y + py * ps + ps/2, ps/2, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                });
+            });
+        }
+
+        function drawHills(canvas) {
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth * 2;
+            canvas.height = window.innerHeight * 0.35;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const isNight = state.settings.theme === 'night';
+
+            // Draw soft rounded hills (bubbles) instead of triangles
+            const hills = [
+                { colors: isNight ? ['#7b4b94', '#9b6dff'] : ['#e2d1f9', '#c792ea'], yOffset: 0.3 },
+                { colors: isNight ? ['#4a2c7a', '#7b4b94'] : ['#ffd6e0', '#ffb5a7'], yOffset: 0.5 }
+            ];
+
+            hills.forEach((layer, layerIdx) => {
+                const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                gradient.addColorStop(0, layer.colors[0]);
+                gradient.addColorStop(1, layer.colors[1]);
+                ctx.fillStyle = gradient;
+
+                for (let i = 0; i < 20; i++) {
+                    const x = i * (canvas.width / 10) - 50 + (layerIdx * 80);
+                    const radius = 80 + Math.random() * 60;
+                    const y = canvas.height * layer.yOffset + Math.random() * 40;
+
+                    ctx.beginPath();
+                    ctx.arc(x, y + radius, radius, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            });
+
+            // Add floating bubbles/circles decoration
+            const bubbleColors = isNight
+                ? ['rgba(155, 109, 255, 0.3)', 'rgba(199, 146, 234, 0.3)', 'rgba(127, 239, 239, 0.2)']
+                : ['rgba(255, 214, 224, 0.5)', 'rgba(199, 146, 234, 0.4)', 'rgba(181, 234, 215, 0.4)'];
+
+            for (let i = 0; i < 25; i++) {
+                ctx.fillStyle = bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height * 0.7;
+                const r = 10 + Math.random() * 30;
+
+                ctx.beginPath();
+                ctx.arc(x, y, r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function drawBuildings(canvas) {
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth * 2;
+            canvas.height = window.innerHeight * 0.3;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.imageSmoothingEnabled = false;
+
+            const isNight = state.settings.theme === 'night';
+            const colors = isNight
+                ? ['#2d1b4e', '#4a2c7a', '#7b4b94', '#9b6dff']
+                : ['#ffd6e0', '#ffb5a7', '#e2d1f9', '#b5ead7'];
+            const windowOn = isNight ? '#fff3b0' : '#7fefef';
+            const windowOff = isNight ? '#4a2c7a' : '#c792ea';
+
+            for (let i = 0; i < 35; i++) {
+                const x = i * 90 + Math.random() * 30;
+                const w = 50 + Math.random() * 35;
+                const h = 60 + Math.random() * 80;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+
+                // Building body
+                ctx.fillStyle = color;
+                ctx.fillRect(x, canvas.height - h, w, h);
+
+                // Rounded top
+                ctx.beginPath();
+                ctx.arc(x + w/2, canvas.height - h, w/2, Math.PI, 0);
+                ctx.fill();
+
+                // Windows
+                for (let wy = 15; wy < h - 10; wy += 18) {
+                    for (let wx = 8; wx < w - 8; wx += 14) {
+                        ctx.fillStyle = Math.random() > 0.35 ? windowOn : windowOff;
+                        ctx.fillRect(x + wx, canvas.height - h + wy, 6, 10);
                     }
                 }
             }
         }
 
-        // Draw the car
-        function drawCar() {
-            const canvas = elements.carCanvas;
+        function drawGround(canvas) {
             const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, 120, 60);
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight * 0.2;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const isNight = state.settings.theme === 'night';
+
+            // Grass
+            ctx.fillStyle = isNight ? '#1d3d3a' : '#b5ead7';
+            ctx.fillRect(0, 0, canvas.width, canvas.height * 0.35);
+
+            // Road
+            ctx.fillStyle = isNight ? '#2d1b4e' : '#e2d1f9';
+            ctx.fillRect(0, canvas.height * 0.25, canvas.width, canvas.height * 0.45);
+
+            // Road lines
+            ctx.fillStyle = isNight ? '#9b6dff' : '#ffffff';
+            for (let x = 0; x < canvas.width; x += 50) {
+                ctx.fillRect(x, canvas.height * 0.45, 25, 4);
+            }
+
+            // Sidewalk
+            ctx.fillStyle = isNight ? '#4a2c7a' : '#ffd6e0';
+            ctx.fillRect(0, canvas.height * 0.65, canvas.width, canvas.height * 0.35);
+
+            // Little flowers
+            const flowerColors = ['#ff8fab', '#fff3b0', '#7fefef', '#c792ea'];
+            for (let i = 0; i < 20; i++) {
+                ctx.fillStyle = flowerColors[Math.floor(Math.random() * flowerColors.length)];
+                ctx.beginPath();
+                ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height * 0.3, 3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function drawCelestial(canvas) {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, 64, 64);
             ctx.imageSmoothingEnabled = false;
 
-            const car = CARS.find(c => c.id === state.selectedCar);
-            const colors = car.colors;
-            const pixelSize = 4;
+            if (state.settings.theme === 'night') {
+                // Moon
+                ctx.fillStyle = '#fff3b0';
+                ctx.beginPath();
+                ctx.arc(32, 32, 20, 0, Math.PI * 2);
+                ctx.fill();
 
-            // Car body (main)
-            ctx.fillStyle = colors.body;
-            // Bottom part
-            ctx.fillRect(8, 32, 104, 16);
-            // Top part
-            ctx.fillRect(24, 16, 64, 20);
+                // Moon shadow
+                ctx.fillStyle = state.settings.theme === 'night' ? '#4a2c7a' : '#fecfef';
+                ctx.beginPath();
+                ctx.arc(40, 28, 16, 0, Math.PI * 2);
+                ctx.fill();
+            } else {
+                // Sun rays
+                ctx.fillStyle = '#fff3b0';
+                for (let i = 0; i < 8; i++) {
+                    ctx.save();
+                    ctx.translate(32, 32);
+                    ctx.rotate((i * Math.PI) / 4);
+                    ctx.fillRect(-2, -28, 4, 10);
+                    ctx.restore();
+                }
 
-            // Roof curve
-            ctx.fillRect(20, 20, 72, 4);
-            ctx.fillRect(16, 24, 80, 4);
+                // Sun body
+                ctx.fillStyle = '#ffd700';
+                ctx.beginPath();
+                ctx.arc(32, 32, 16, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function drawCar() {
+            const canvas = el.carCanvas;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, 100, 50);
+            ctx.imageSmoothingEnabled = false;
+
+            const car = CARS.find(c => c.id === state.selectedCar) || CARS[0];
+            const color = car.color;
+
+            // Car body
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.roundRect(5, 22, 90, 20, 4);
+            ctx.fill();
+
+            // Car top
+            ctx.beginPath();
+            ctx.roundRect(20, 8, 55, 18, [8, 8, 0, 0]);
+            ctx.fill();
 
             // Windows
-            ctx.fillStyle = colors.window;
-            ctx.fillRect(28, 20, 24, 12);
-            ctx.fillRect(56, 20, 28, 12);
+            ctx.fillStyle = '#7fefef';
+            ctx.beginPath();
+            ctx.roundRect(24, 11, 22, 12, 3);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.roundRect(50, 11, 22, 12, 3);
+            ctx.fill();
 
             // Window shine
-            ctx.fillStyle = 'rgba(255,255,255,0.5)';
-            ctx.fillRect(30, 22, 4, 8);
-            ctx.fillRect(58, 22, 4, 8);
+            ctx.fillStyle = 'rgba(255,255,255,0.4)';
+            ctx.fillRect(26, 13, 3, 8);
+            ctx.fillRect(52, 13, 3, 8);
 
-            // Wheels
-            ctx.fillStyle = colors.wheel;
-            // Front wheel
-            ctx.fillRect(20, 44, 20, 12);
-            ctx.fillRect(24, 48, 12, 4);
-            // Back wheel
-            ctx.fillRect(80, 44, 20, 12);
-            ctx.fillRect(84, 48, 12, 4);
-
-            // Wheel shine
-            ctx.fillStyle = '#8b7a96';
-            ctx.fillRect(26, 46, 8, 8);
-            ctx.fillRect(86, 46, 8, 8);
-
-            // Headlights
+            // Headlight
             ctx.fillStyle = '#fff3b0';
-            ctx.fillRect(104, 36, 8, 8);
+            ctx.beginPath();
+            ctx.arc(92, 30, 4, 0, Math.PI * 2);
+            ctx.fill();
 
-            // Tail lights
+            // Tail light
             ctx.fillStyle = '#ff5c8d';
-            ctx.fillRect(8, 36, 6, 6);
+            ctx.beginPath();
+            ctx.arc(8, 30, 3, 0, Math.PI * 2);
+            ctx.fill();
 
-            // Cute face on car (Hello Kitty inspired)
+            // Cute face
             ctx.fillStyle = '#5c4158';
-            // Eyes
-            ctx.fillRect(36, 24, 4, 4);
-            ctx.fillRect(48, 24, 4, 4);
+            ctx.fillRect(32, 15, 3, 3);
+            ctx.fillRect(42, 15, 3, 3);
 
             // Blush
             ctx.fillStyle = '#ff8fab';
-            ctx.fillRect(32, 28, 4, 2);
-            ctx.fillRect(52, 28, 4, 2);
+            ctx.beginPath();
+            ctx.arc(29, 19, 2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(48, 19, 2, 0, Math.PI * 2);
+            ctx.fill();
 
-            // Little bow on top
+            // Bow
             ctx.fillStyle = '#ff5c8d';
-            ctx.fillRect(52, 12, 8, 4);
-            ctx.fillRect(48, 14, 4, 4);
-            ctx.fillRect(60, 14, 4, 4);
+            ctx.beginPath();
+            ctx.arc(52, 6, 4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(58, 6, 4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillRect(53, 4, 4, 5);
         }
 
-        // ===== Audio Context =====
-        let audioContext = null;
-
-        function initAudioContext() {
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (audioContext.state === 'suspended') {
-                audioContext.resume();
-            }
-            return audioContext;
+        function updateWheels() {
+            const wheel = WHEELS.find(w => w.id === state.selectedWheel) || WHEELS[0];
+            el.wheelFront.style.background = wheel.color;
+            el.wheelFront.style.borderColor = wheel.accent;
+            el.wheelBack.style.background = wheel.color;
+            el.wheelBack.style.borderColor = wheel.accent;
         }
 
-        function playSound(type = 'complete') {
+        function drawAllLayers() {
+            drawStars(el.starsCanvas);
+            drawClouds(el.cloudsCanvas);
+            drawHills(el.hillsCanvas);
+            drawBuildings(el.buildingsCanvas);
+            drawGround(el.groundCanvas);
+            drawCelestial(el.celestialCanvas);
+            drawCar();
+            updateWheels();
+        }
+
+        // ===== Audio =====
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            return audioCtx;
+        }
+
+        function playSound(type) {
             if (!state.settings.soundEnabled) return;
-
             try {
-                const ctx = initAudioContext();
-                const oscillator = ctx.createOscillator();
-                const gainNode = ctx.createGain();
+                const ctx = initAudio();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
 
-                oscillator.connect(gainNode);
-                gainNode.connect(ctx.destination);
-
-                const volume = state.settings.volume / 100 * 0.2;
-                gainNode.gain.setValueAtTime(volume, ctx.currentTime);
+                const vol = state.settings.volume / 100 * 0.15;
+                gain.gain.setValueAtTime(vol, ctx.currentTime);
 
                 if (type === 'complete') {
-                    // Cute completion jingle
-                    oscillator.type = 'sine';
-                    oscillator.frequency.setValueAtTime(523.25, ctx.currentTime);
-                    oscillator.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1);
-                    oscillator.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2);
-                    oscillator.frequency.setValueAtTime(1046.50, ctx.currentTime + 0.3);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-                    oscillator.start(ctx.currentTime);
-                    oscillator.stop(ctx.currentTime + 0.5);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523, ctx.currentTime);
+                    osc.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
+                    osc.frequency.setValueAtTime(784, ctx.currentTime + 0.2);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.4);
                 } else if (type === 'coin') {
-                    // Coin collect sound
-                    oscillator.type = 'square';
-                    oscillator.frequency.setValueAtTime(987.77, ctx.currentTime);
-                    oscillator.frequency.setValueAtTime(1318.51, ctx.currentTime + 0.05);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
-                    oscillator.start(ctx.currentTime);
-                    oscillator.stop(ctx.currentTime + 0.15);
-                } else if (type === 'break') {
-                    // Break start sound
-                    oscillator.type = 'sine';
-                    oscillator.frequency.setValueAtTime(783.99, ctx.currentTime);
-                    oscillator.frequency.setValueAtTime(659.25, ctx.currentTime + 0.15);
-                    oscillator.frequency.setValueAtTime(523.25, ctx.currentTime + 0.3);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-                    oscillator.start(ctx.currentTime);
-                    oscillator.stop(ctx.currentTime + 0.5);
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(988, ctx.currentTime);
+                    osc.frequency.setValueAtTime(1319, ctx.currentTime + 0.05);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.12);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.12);
                 }
-            } catch (e) {
-                console.warn('Audio failed:', e);
-            }
+            } catch (e) {}
         }
 
-        // ===== Progress Ring =====
+        // ===== Timer =====
         const ringCircumference = 2 * Math.PI * 45;
-        elements.progressRing.style.strokeDasharray = ringCircumference;
+        el.progressRing.style.strokeDasharray = ringCircumference;
 
         function updateProgressRing() {
             const progress = state.timeRemaining / state.totalTime;
-            const offset = ringCircumference * (1 - progress);
-            elements.progressRing.style.strokeDashoffset = offset;
-
-            // Update gradient based on mode
-            if (state.currentMode === 'work') {
-                elements.progressRing.style.stroke = 'url(#timerGradient)';
-            } else {
-                elements.progressRing.style.stroke = 'url(#breakGradient)';
-            }
+            el.progressRing.style.strokeDashoffset = ringCircumference * (1 - progress);
+            el.progressRing.style.stroke = state.currentMode === 'work' ? 'url(#timerGradient)' : 'url(#breakGradient)';
         }
 
-        // ===== Timer Functions =====
-        function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = seconds % 60;
-            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        function formatTime(s) {
+            return `${Math.floor(s / 60).toString().padStart(2, '0')}:${(s % 60).toString().padStart(2, '0')}`;
         }
 
         function updateDisplay() {
-            elements.timerDisplay.textContent = formatTime(state.timeRemaining);
+            el.timerDisplay.textContent = formatTime(state.timeRemaining);
             updateProgressRing();
-            document.title = `${formatTime(state.timeRemaining)} - ${state.currentMode === 'work' ? '💪 Focus' : '☕ Break'} | Pomo Drive`;
+            document.title = `${formatTime(state.timeRemaining)} - Pomo Drive`;
         }
 
         function setMode(mode) {
             state.currentMode = mode;
-
             if (mode === 'work') {
-                elements.modeBadge.className = 'mode-badge work';
-                elements.modeBadge.textContent = 'Focus Time';
-                elements.timerLabel.textContent = 'stay focused!';
+                el.modeBadge.className = 'mode-badge work';
+                el.modeBadge.textContent = 'Focus Time';
+                el.timerLabel.textContent = 'stay focused!';
                 state.totalTime = state.settings.workDuration * 60;
-                elements.breakGlow.classList.remove('active');
-                elements.workOverlay.classList.add('show');
+                el.breakGlow.classList.remove('active');
                 stopCoinGeneration();
             } else {
-                elements.modeBadge.className = 'mode-badge break';
-                elements.modeBadge.textContent = mode === 'shortBreak' ? 'Short Break' : 'Long Break';
-                elements.timerLabel.textContent = 'relax & earn coins! 🪙';
-                state.totalTime = mode === 'shortBreak'
-                    ? state.settings.shortBreakDuration * 60
-                    : state.settings.longBreakDuration * 60;
-                elements.breakGlow.classList.add('active');
-                elements.workOverlay.classList.remove('show');
+                el.modeBadge.className = 'mode-badge break';
+                el.modeBadge.textContent = mode === 'shortBreak' ? 'Short Break' : 'Long Break';
+                el.timerLabel.textContent = 'relax & earn coins!';
+                state.totalTime = mode === 'shortBreak' ? state.settings.shortBreakDuration * 60 : state.settings.longBreakDuration * 60;
+                el.breakGlow.classList.add('active');
             }
-
             state.timeRemaining = state.totalTime;
             updateDisplay();
         }
 
         function updateSessionInfo() {
-            elements.sessionInfo.textContent = `Session ${state.currentSession} of ${state.settings.sessionsUntilLong} 🍅`;
+            el.sessionInfo.textContent = `Session ${state.currentSession} of ${state.settings.sessionsUntilLong} 🍅`;
         }
 
         function startTimer() {
             if (state.isRunning && !state.isPaused) return;
-
-            initAudioContext();
+            initAudio();
             state.isRunning = true;
             state.isPaused = false;
 
-            elements.startBtn.textContent = '🚗 Driving...';
-            elements.startBtn.disabled = true;
-            elements.pauseBtn.disabled = false;
-            elements.timerDisplay.classList.add('running');
-            elements.gameContainer.classList.add('driving');
-            elements.carCanvas.classList.add('driving');
+            el.startBtn.textContent = '🚗 Driving...';
+            el.startBtn.disabled = true;
+            el.pauseBtn.disabled = false;
+            el.timerDisplay.classList.add('running');
+            el.gameContainer.classList.add('driving');
+            el.carWrapper.classList.add('driving');
 
-            // Show work overlay during work mode
             if (state.currentMode === 'work') {
-                elements.workOverlay.classList.add('show');
+                el.workOverlay.classList.add('show');
             } else {
                 startCoinGeneration();
             }
 
+            startExhaust();
+
             state.timerInterval = setInterval(() => {
                 state.timeRemaining--;
                 updateDisplay();
-
-                if (state.timeRemaining <= 0) {
-                    timerComplete();
-                }
+                if (state.timeRemaining <= 0) timerComplete();
             }, 1000);
         }
 
         function pauseTimer() {
             if (!state.isRunning) return;
-
             state.isPaused = true;
             clearInterval(state.timerInterval);
             stopCoinGeneration();
+            stopExhaust();
 
-            elements.startBtn.textContent = '▶ Resume';
-            elements.startBtn.disabled = false;
-            elements.pauseBtn.disabled = true;
-            elements.timerDisplay.classList.remove('running');
-            elements.gameContainer.classList.remove('driving');
-            elements.carCanvas.classList.remove('driving');
-            elements.workOverlay.classList.remove('show');
+            el.startBtn.textContent = '▶ Resume';
+            el.startBtn.disabled = false;
+            el.pauseBtn.disabled = true;
+            el.timerDisplay.classList.remove('running');
+            el.gameContainer.classList.remove('driving');
+            el.carWrapper.classList.remove('driving');
+            el.workOverlay.classList.remove('show');
         }
 
         function resetTimer() {
             clearInterval(state.timerInterval);
             stopCoinGeneration();
+            stopExhaust();
             state.isRunning = false;
             state.isPaused = false;
 
             setMode(state.currentMode);
 
-            elements.startBtn.textContent = '▶ Start';
-            elements.startBtn.disabled = false;
-            elements.pauseBtn.disabled = true;
-            elements.timerDisplay.classList.remove('running');
-            elements.gameContainer.classList.remove('driving');
-            elements.carCanvas.classList.remove('driving');
-            elements.workOverlay.classList.remove('show');
-
-            updateDisplay();
+            el.startBtn.textContent = '▶ Start';
+            el.startBtn.disabled = false;
+            el.pauseBtn.disabled = true;
+            el.timerDisplay.classList.remove('running');
+            el.gameContainer.classList.remove('driving');
+            el.carWrapper.classList.remove('driving');
+            el.workOverlay.classList.remove('show');
         }
 
         function timerComplete() {
             clearInterval(state.timerInterval);
             stopCoinGeneration();
+            stopExhaust();
             state.isRunning = false;
             state.isPaused = false;
-            elements.timerDisplay.classList.remove('running');
-            elements.gameContainer.classList.remove('driving');
-            elements.carCanvas.classList.remove('driving');
-            elements.workOverlay.classList.remove('show');
+
+            el.timerDisplay.classList.remove('running');
+            el.gameContainer.classList.remove('driving');
+            el.carWrapper.classList.remove('driving');
+            el.workOverlay.classList.remove('show');
 
             if (state.currentMode === 'work') {
-                state.completedPomodoros++;
                 state.stats.today++;
                 updateStatsDisplay();
                 playSound('complete');
-                showBrowserNotification('Great work! 🎉', 'Time for a well-deserved break!');
-                showToast('🎉 Session complete! Time to relax!');
+                showToast('🎉 Session complete!');
 
                 if (state.currentSession >= state.settings.sessionsUntilLong) {
                     setMode('longBreak');
@@ -1875,46 +1989,39 @@
                     setMode('shortBreak');
                     state.currentSession++;
                 }
-
                 updateSessionInfo();
 
                 if (state.settings.autoStartBreaks) {
-                    setTimeout(() => {
-                        startTimer();
-                        startCoinGeneration();
-                    }, 1000);
+                    setTimeout(() => { startTimer(); startCoinGeneration(); }, 1000);
                 } else {
-                    elements.startBtn.textContent = '▶ Start Break';
-                    elements.startBtn.disabled = false;
+                    el.startBtn.textContent = '▶ Start Break';
+                    el.startBtn.disabled = false;
                 }
             } else {
-                playSound('break');
-                showBrowserNotification('Break over! 💪', 'Ready to focus again?');
-                showToast('☕ Break complete! Back to work!');
+                playSound('complete');
+                showToast('☕ Break complete!');
                 setMode('work');
 
                 if (state.settings.autoStartWork) {
                     setTimeout(startTimer, 1000);
                 } else {
-                    elements.startBtn.textContent = '▶ Start';
-                    elements.startBtn.disabled = false;
+                    el.startBtn.textContent = '▶ Start';
+                    el.startBtn.disabled = false;
                 }
             }
-
-            elements.pauseBtn.disabled = true;
+            el.pauseBtn.disabled = true;
             saveState();
         }
 
-        // ===== Coin System =====
+        // ===== Coins =====
         function startCoinGeneration() {
             if (state.coinInterval) return;
-
             state.coinInterval = setInterval(() => {
                 if (state.currentMode !== 'work' && state.isRunning && !state.isPaused) {
                     addCoins(1);
                     createFloatingCoin();
                 }
-            }, 3000); // Earn 1 coin every 3 seconds during break
+            }, 3000);
         }
 
         function stopCoinGeneration() {
@@ -1924,69 +2031,80 @@
             }
         }
 
-        function addCoins(amount) {
-            state.coins += amount;
-            state.stats.totalCoins += amount;
+        function addCoins(n) {
+            state.coins += n;
+            state.stats.totalCoins += n;
             updateCoinDisplay();
             playSound('coin');
             saveState();
         }
 
         function updateCoinDisplay() {
-            elements.coinCount.textContent = state.coins;
-            elements.totalCoins.textContent = state.stats.totalCoins;
+            el.coinCount.textContent = state.coins;
+            el.totalCoins.textContent = state.stats.totalCoins;
         }
 
         function createFloatingCoin() {
             const coin = document.createElement('div');
             coin.className = 'floating-coin';
             coin.textContent = '🪙';
-            coin.style.left = `${20 + Math.random() * 20}%`;
-            coin.style.bottom = '20%';
-            elements.floatingCoins.appendChild(coin);
-
-            setTimeout(() => coin.remove(), 2000);
+            coin.style.left = `${15 + Math.random() * 15}%`;
+            coin.style.bottom = '18%';
+            el.floatingCoins.appendChild(coin);
+            setTimeout(() => coin.remove(), 1500);
         }
 
-        // ===== Shop Functions =====
+        // ===== Shop =====
         function populateShop() {
-            elements.carGrid.innerHTML = '';
-
+            el.carGrid.innerHTML = '';
             CARS.forEach(car => {
                 const owned = state.ownedCars.includes(car.id);
                 const selected = state.selectedCar === car.id;
                 const canAfford = state.coins >= car.price;
 
                 const div = document.createElement('div');
-                div.className = `car-option ${selected ? 'selected' : ''} ${!owned && !canAfford ? 'locked' : ''}`;
+                div.className = `shop-item ${selected ? 'selected' : ''} ${!owned && !canAfford ? 'locked' : ''}`;
                 div.innerHTML = `
-                    <div class="car-preview">${car.emoji}</div>
-                    <div class="car-name">${car.name}</div>
-                    <div class="car-price ${owned ? 'owned' : ''}">
-                        ${owned ? '✓ Owned' : `🪙 ${car.price}`}
-                    </div>
+                    <div class="item-preview">${car.emoji}</div>
+                    <div class="item-name">${car.name}</div>
+                    <div class="item-price ${owned ? 'owned' : ''}">${owned ? '✓' : '🪙' + car.price}</div>
                 `;
+                div.onclick = () => {
+                    if (owned) selectCar(car.id);
+                    else if (canAfford) buyCar(car);
+                    else showToast(`Need ${car.price - state.coins} more coins!`);
+                };
+                el.carGrid.appendChild(div);
+            });
 
-                div.addEventListener('click', () => {
-                    if (owned) {
-                        selectCar(car.id);
-                    } else if (canAfford) {
-                        buyCar(car);
-                    } else {
-                        showToast(`Need ${car.price - state.coins} more coins! 🪙`);
-                    }
-                });
+            el.wheelGrid.innerHTML = '';
+            WHEELS.forEach(wheel => {
+                const owned = state.ownedWheels.includes(wheel.id);
+                const selected = state.selectedWheel === wheel.id;
+                const canAfford = state.coins >= wheel.price;
 
-                elements.carGrid.appendChild(div);
+                const div = document.createElement('div');
+                div.className = `shop-item ${selected ? 'selected' : ''} ${!owned && !canAfford ? 'locked' : ''}`;
+                div.innerHTML = `
+                    <div class="item-preview" style="width:24px;height:24px;border-radius:50%;background:${wheel.color};border:3px solid ${wheel.accent};margin:0 auto 4px;"></div>
+                    <div class="item-name">${wheel.name}</div>
+                    <div class="item-price ${owned ? 'owned' : ''}">${owned ? '✓' : '🪙' + wheel.price}</div>
+                `;
+                div.onclick = () => {
+                    if (owned) selectWheel(wheel.id);
+                    else if (canAfford) buyWheel(wheel);
+                    else showToast(`Need ${wheel.price - state.coins} more coins!`);
+                };
+                el.wheelGrid.appendChild(div);
             });
         }
 
-        function selectCar(carId) {
-            state.selectedCar = carId;
+        function selectCar(id) {
+            state.selectedCar = id;
             drawCar();
             populateShop();
             saveState();
-            showToast(`Selected ${CARS.find(c => c.id === carId).name}! 🚗`);
+            showToast(`Selected ${CARS.find(c => c.id === id).name}!`);
         }
 
         function buyCar(car) {
@@ -1997,146 +2115,115 @@
             showToast(`Bought ${car.name}! 🎉`);
         }
 
-        // ===== Browser Notifications =====
-        async function requestNotificationPermission() {
-            if (!('Notification' in window)) {
-                showToast('Browser notifications not supported');
-                return false;
-            }
-            if (Notification.permission === 'granted') return true;
-            if (Notification.permission !== 'denied') {
-                const permission = await Notification.requestPermission();
-                return permission === 'granted';
-            }
-            return false;
+        function selectWheel(id) {
+            state.selectedWheel = id;
+            updateWheels();
+            populateShop();
+            saveState();
+            showToast(`Selected ${WHEELS.find(w => w.id === id).name} wheels!`);
         }
 
-        function showBrowserNotification(title, body) {
-            if (!state.settings.browserNotifications) return;
-            if (Notification.permission !== 'granted') return;
-            try {
-                new Notification(title, { body });
-            } catch (e) {
-                console.warn('Notification failed:', e);
-            }
+        function buyWheel(wheel) {
+            state.coins -= wheel.price;
+            state.ownedWheels.push(wheel.id);
+            selectWheel(wheel.id);
+            updateCoinDisplay();
+            showToast(`Bought ${wheel.name} wheels! 🎉`);
         }
 
-        // ===== Panel Functions =====
+        // ===== Panels =====
         function openShop() {
-            // Can only open shop during break or when not running
             if (state.currentMode === 'work' && state.isRunning && !state.isPaused) {
-                showToast('Finish your work session first! 💪');
+                showToast('Finish work first! 💪');
                 return;
             }
             populateShop();
-            elements.shopPanel.classList.add('open');
-            elements.shopOverlay.classList.add('open');
+            el.shopPanel.classList.add('open');
+            el.shopOverlay.classList.add('open');
         }
 
         function closeShop() {
-            elements.shopPanel.classList.remove('open');
-            elements.shopOverlay.classList.remove('open');
+            el.shopPanel.classList.remove('open');
+            el.shopOverlay.classList.remove('open');
         }
 
         function openSettings() {
             if (state.currentMode === 'work' && state.isRunning && !state.isPaused) {
-                showToast('Finish your work session first! 💪');
+                showToast('Finish work first! 💪');
                 return;
             }
-            elements.settingsPanel.classList.add('open');
-            elements.settingsOverlay.classList.add('open');
+            el.settingsPanel.classList.add('open');
+            el.settingsOverlay.classList.add('open');
         }
 
         function closeSettings() {
-            elements.settingsPanel.classList.remove('open');
-            elements.settingsOverlay.classList.remove('open');
+            el.settingsPanel.classList.remove('open');
+            el.settingsOverlay.classList.remove('open');
         }
 
-        // ===== Settings Functions =====
+        // ===== Settings =====
         function applySettings() {
-            state.settings.workDuration = Math.max(1, Math.min(60, parseInt(elements.workDuration.value) || 25));
-            state.settings.shortBreakDuration = Math.max(1, Math.min(60, parseInt(elements.shortBreakDuration.value) || 5));
-            state.settings.longBreakDuration = Math.max(1, Math.min(60, parseInt(elements.longBreakDuration.value) || 15));
-            state.settings.sessionsUntilLong = Math.max(1, Math.min(10, parseInt(elements.sessionsUntilLong.value) || 4));
+            state.settings.workDuration = Math.max(1, Math.min(60, parseInt(el.workDuration.value) || 25));
+            state.settings.shortBreakDuration = Math.max(1, Math.min(60, parseInt(el.shortBreakDuration.value) || 5));
+            state.settings.longBreakDuration = Math.max(1, Math.min(60, parseInt(el.longBreakDuration.value) || 15));
+            state.settings.sessionsUntilLong = Math.max(1, Math.min(10, parseInt(el.sessionsUntilLong.value) || 4));
 
-            elements.workDuration.value = state.settings.workDuration;
-            elements.shortBreakDuration.value = state.settings.shortBreakDuration;
-            elements.longBreakDuration.value = state.settings.longBreakDuration;
-            elements.sessionsUntilLong.value = state.settings.sessionsUntilLong;
+            el.workDuration.value = state.settings.workDuration;
+            el.shortBreakDuration.value = state.settings.shortBreakDuration;
+            el.longBreakDuration.value = state.settings.longBreakDuration;
+            el.sessionsUntilLong.value = state.settings.sessionsUntilLong;
 
-            state.settings.volume = parseInt(elements.volumeSlider.value);
-
+            state.settings.volume = parseInt(el.volumeSlider.value);
             updateSessionInfo();
 
-            if (!state.isRunning) {
-                setMode(state.currentMode);
-            }
-
+            if (!state.isRunning) setMode(state.currentMode);
             saveState();
         }
 
         function initSettingsUI() {
-            elements.workDuration.value = state.settings.workDuration;
-            elements.shortBreakDuration.value = state.settings.shortBreakDuration;
-            elements.longBreakDuration.value = state.settings.longBreakDuration;
-            elements.sessionsUntilLong.value = state.settings.sessionsUntilLong;
-            elements.volumeSlider.value = state.settings.volume;
+            el.workDuration.value = state.settings.workDuration;
+            el.shortBreakDuration.value = state.settings.shortBreakDuration;
+            el.longBreakDuration.value = state.settings.longBreakDuration;
+            el.sessionsUntilLong.value = state.settings.sessionsUntilLong;
+            el.volumeSlider.value = state.settings.volume;
 
-            if (state.settings.autoStartBreaks) elements.autoStartBreaks.classList.add('active');
-            if (state.settings.autoStartWork) elements.autoStartWork.classList.add('active');
-            if (state.settings.soundEnabled) elements.soundEnabled.classList.add('active');
-            if (state.settings.browserNotifications) elements.browserNotifications.classList.add('active');
+            if (state.settings.autoStartBreaks) el.autoStartBreaks.classList.add('active');
+            if (state.settings.autoStartWork) el.autoStartWork.classList.add('active');
+            if (state.settings.soundEnabled) el.soundEnabled.classList.add('active');
 
-            elements.themeButtons.forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.theme === state.settings.theme);
-            });
+            el.themeButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.theme === state.settings.theme));
         }
 
         function setTheme(theme) {
             state.settings.theme = theme;
             document.documentElement.setAttribute('data-theme', theme === 'day' ? '' : 'night');
-
-            elements.themeButtons.forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.theme === theme);
-            });
-
-            // Redraw all canvases
+            el.themeButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.theme === theme));
             drawAllLayers();
             saveState();
         }
 
-        function drawAllLayers() {
-            drawStars(elements.starsCanvas);
-            drawClouds(elements.cloudsCanvas);
-            drawMountains(elements.mountainsCanvas);
-            drawBuildings(elements.buildingsCanvas);
-            drawGround(elements.groundCanvas);
-            drawCelestial(elements.celestialCanvas);
-            drawCar();
-        }
-
-        // ===== Stats Display =====
         function updateStatsDisplay() {
             const today = new Date().toDateString();
             if (state.stats.lastResetDate !== today) {
                 state.stats.today = 0;
                 state.stats.lastResetDate = today;
             }
-            elements.todayPomodoros.textContent = state.stats.today;
-            elements.totalCoins.textContent = state.stats.totalCoins;
+            el.todayPomodoros.textContent = state.stats.today;
+            el.totalCoins.textContent = state.stats.totalCoins;
         }
 
-        // ===== Local Storage =====
+        // ===== Storage =====
         function saveState() {
-            const data = {
+            localStorage.setItem('pomoDriveState', JSON.stringify({
                 coins: state.coins,
                 selectedCar: state.selectedCar,
+                selectedWheel: state.selectedWheel,
                 ownedCars: state.ownedCars,
+                ownedWheels: state.ownedWheels,
                 settings: state.settings,
                 stats: state.stats,
                 currentSession: state.currentSession
-            };
-            localStorage.setItem('pomoDriveState', JSON.stringify(data));
+            }));
         }
 
         function loadState() {
@@ -2146,37 +2233,28 @@
                     const data = JSON.parse(saved);
                     if (data.coins !== undefined) state.coins = data.coins;
                     if (data.selectedCar) state.selectedCar = data.selectedCar;
+                    if (data.selectedWheel) state.selectedWheel = data.selectedWheel;
                     if (data.ownedCars) state.ownedCars = data.ownedCars;
+                    if (data.ownedWheels) state.ownedWheels = data.ownedWheels;
                     if (data.settings) state.settings = { ...state.settings, ...data.settings };
                     if (data.stats) state.stats = { ...state.stats, ...data.stats };
                     if (data.currentSession) state.currentSession = data.currentSession;
 
-                    // Reset daily stats if needed
                     const today = new Date().toDateString();
                     if (state.stats.lastResetDate !== today) {
                         state.stats.today = 0;
                         state.stats.lastResetDate = today;
                     }
                 }
-            } catch (e) {
-                console.warn('Failed to load state:', e);
-            }
+            } catch (e) {}
         }
 
         function resetToDefaults() {
             state.settings = {
-                workDuration: 25,
-                shortBreakDuration: 5,
-                longBreakDuration: 15,
-                sessionsUntilLong: 4,
-                autoStartBreaks: false,
-                autoStartWork: false,
-                soundEnabled: true,
-                volume: 70,
-                browserNotifications: false,
-                theme: 'day'
+                workDuration: 25, shortBreakDuration: 5, longBreakDuration: 15,
+                sessionsUntilLong: 4, autoStartBreaks: false, autoStartWork: false,
+                soundEnabled: true, volume: 70, theme: 'day'
             };
-
             initSettingsUI();
             setTheme('day');
             applySettings();
@@ -2184,128 +2262,95 @@
         }
 
         function clearAllData() {
-            if (confirm('Clear all data? This includes coins and cars! 😢')) {
+            if (confirm('Clear all data including coins?')) {
                 localStorage.removeItem('pomoDriveState');
-
                 state.coins = 0;
                 state.selectedCar = 'pink';
+                state.selectedWheel = 'standard';
                 state.ownedCars = ['pink'];
+                state.ownedWheels = ['standard'];
                 state.stats = { today: 0, totalCoins: 0, lastResetDate: new Date().toDateString() };
                 state.currentSession = 1;
-
                 resetToDefaults();
                 updateCoinDisplay();
                 updateStatsDisplay();
                 updateSessionInfo();
                 drawCar();
-
+                updateWheels();
                 showToast('All data cleared! 🗑️');
             }
         }
 
         // ===== Toast =====
-        function showToast(message, duration = 3000) {
-            elements.toast.textContent = message;
-            elements.toast.classList.add('show');
-            setTimeout(() => elements.toast.classList.remove('show'), duration);
+        function showToast(msg, dur = 2500) {
+            el.toast.textContent = msg;
+            el.toast.classList.add('show');
+            setTimeout(() => el.toast.classList.remove('show'), dur);
         }
 
-        // ===== Event Listeners =====
-        function setupEventListeners() {
-            elements.startBtn.addEventListener('click', startTimer);
-            elements.pauseBtn.addEventListener('click', pauseTimer);
-            elements.resetBtn.addEventListener('click', resetTimer);
+        // ===== Events =====
+        function setupEvents() {
+            el.startBtn.onclick = startTimer;
+            el.pauseBtn.onclick = pauseTimer;
+            el.resetBtn.onclick = resetTimer;
 
-            elements.shopBtn.addEventListener('click', openShop);
-            elements.closeShopBtn.addEventListener('click', closeShop);
-            elements.shopOverlay.addEventListener('click', closeShop);
+            el.shopBtn.onclick = openShop;
+            el.closeShopBtn.onclick = closeShop;
+            el.shopOverlay.onclick = closeShop;
 
-            elements.settingsBtn.addEventListener('click', openSettings);
-            elements.closeSettingsBtn.addEventListener('click', closeSettings);
-            elements.settingsOverlay.addEventListener('click', closeSettings);
+            el.settingsBtn.onclick = openSettings;
+            el.closeSettingsBtn.onclick = closeSettings;
+            el.settingsOverlay.onclick = closeSettings;
 
-            [elements.workDuration, elements.shortBreakDuration, elements.longBreakDuration, elements.sessionsUntilLong].forEach(input => {
-                input.addEventListener('change', applySettings);
+            [el.workDuration, el.shortBreakDuration, el.longBreakDuration, el.sessionsUntilLong].forEach(input => {
+                input.onchange = applySettings;
             });
 
-            elements.volumeSlider.addEventListener('input', () => {
-                state.settings.volume = parseInt(elements.volumeSlider.value);
+            el.volumeSlider.oninput = () => { state.settings.volume = parseInt(el.volumeSlider.value); saveState(); };
+            el.volumeSlider.onchange = () => playSound('coin');
+
+            el.autoStartBreaks.onclick = () => {
+                el.autoStartBreaks.classList.toggle('active');
+                state.settings.autoStartBreaks = el.autoStartBreaks.classList.contains('active');
                 saveState();
-            });
-            elements.volumeSlider.addEventListener('change', () => playSound('coin'));
+            };
 
-            elements.autoStartBreaks.addEventListener('click', () => {
-                elements.autoStartBreaks.classList.toggle('active');
-                state.settings.autoStartBreaks = elements.autoStartBreaks.classList.contains('active');
+            el.autoStartWork.onclick = () => {
+                el.autoStartWork.classList.toggle('active');
+                state.settings.autoStartWork = el.autoStartWork.classList.contains('active');
                 saveState();
-            });
+            };
 
-            elements.autoStartWork.addEventListener('click', () => {
-                elements.autoStartWork.classList.toggle('active');
-                state.settings.autoStartWork = elements.autoStartWork.classList.contains('active');
+            el.soundEnabled.onclick = () => {
+                el.soundEnabled.classList.toggle('active');
+                state.settings.soundEnabled = el.soundEnabled.classList.contains('active');
                 saveState();
-            });
+            };
 
-            elements.soundEnabled.addEventListener('click', () => {
-                elements.soundEnabled.classList.toggle('active');
-                state.settings.soundEnabled = elements.soundEnabled.classList.contains('active');
-                saveState();
-            });
+            el.themeButtons.forEach(btn => btn.onclick = () => setTheme(btn.dataset.theme));
+            el.resetDefaults.onclick = resetToDefaults;
+            el.clearAllData.onclick = clearAllData;
 
-            elements.browserNotifications.addEventListener('click', async () => {
-                if (!elements.browserNotifications.classList.contains('active')) {
-                    const granted = await requestNotificationPermission();
-                    if (granted) {
-                        elements.browserNotifications.classList.add('active');
-                        state.settings.browserNotifications = true;
-                        showToast('Notifications enabled! 🔔');
-                    } else {
-                        showToast('Permission denied 😢');
-                    }
-                } else {
-                    elements.browserNotifications.classList.remove('active');
-                    state.settings.browserNotifications = false;
-                }
-                saveState();
-            });
-
-            elements.themeButtons.forEach(btn => {
-                btn.addEventListener('click', () => setTheme(btn.dataset.theme));
-            });
-
-            elements.resetDefaults.addEventListener('click', resetToDefaults);
-            elements.clearAllData.addEventListener('click', clearAllData);
-
-            // Keyboard shortcuts
-            document.addEventListener('keydown', (e) => {
+            document.onkeydown = (e) => {
                 if (e.target.tagName === 'INPUT') return;
-                switch (e.code) {
-                    case 'Space':
-                        e.preventDefault();
-                        if (state.isRunning && !state.isPaused) pauseTimer();
-                        else startTimer();
-                        break;
-                    case 'KeyR':
-                        if (!e.ctrlKey && !e.metaKey) resetTimer();
-                        break;
-                    case 'Escape':
-                        closeShop();
-                        closeSettings();
-                        break;
-                }
-            });
+                if (e.code === 'Space') { e.preventDefault(); state.isRunning && !state.isPaused ? pauseTimer() : startTimer(); }
+                else if (e.code === 'KeyR' && !e.ctrlKey && !e.metaKey) resetTimer();
+                else if (e.code === 'Escape') { closeShop(); closeSettings(); }
+            };
 
-            // Resize handler
-            window.addEventListener('resize', () => {
-                drawAllLayers();
-            });
+            let resizeTimeout;
+            window.onresize = () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(drawAllLayers, 150);
+            };
         }
 
-        // ===== Initialization =====
+        // ===== Init =====
         function init() {
             loadState();
             setTheme(state.settings.theme);
             initSettingsUI();
+            initParticlePool();
 
             state.timeRemaining = state.settings.workDuration * 60;
             state.totalTime = state.settings.workDuration * 60;
@@ -2315,12 +2360,7 @@
             updateSessionInfo();
             updateCoinDisplay();
             updateStatsDisplay();
-            setupEventListeners();
-
-            if (state.settings.browserNotifications && Notification.permission !== 'granted') {
-                state.settings.browserNotifications = false;
-                elements.browserNotifications.classList.remove('active');
-            }
+            setupEvents();
         }
 
         init();
