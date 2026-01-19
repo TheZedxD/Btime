@@ -84,7 +84,19 @@
         }
 
         body {
-            font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, sans-serif;
+            /* Enhanced font stack for cross-platform compatibility:
+               - Quicksand: Google Font (primary)
+               - -apple-system: macOS/iOS system font
+               - BlinkMacSystemFont: macOS
+               - Segoe UI: Windows
+               - Roboto: Android, Linux
+               - Ubuntu: Linux (Ubuntu)
+               - Cantarell: Linux (GNOME)
+               - Helvetica Neue: macOS fallback
+               - Arial: Universal fallback
+               - sans-serif: Generic fallback
+            */
+            font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, sans-serif;
             background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 50%, var(--sky-bottom) 100%);
             transition: background var(--transition-slow);
             -webkit-font-smoothing: antialiased;
@@ -93,7 +105,15 @@
 
         /* ===== Pixel Font ===== */
         .pixel-font {
-            font-family: 'Press Start 2P', monospace;
+            /* Enhanced monospace font stack:
+               - Press Start 2P: Google Font (primary, pixel/retro style)
+               - Courier New: Windows monospace
+               - Courier: macOS monospace
+               - Monaco: macOS alternative
+               - Consolas: Windows alternative
+               - monospace: Generic fallback
+            */
+            font-family: 'Press Start 2P', 'Courier New', Courier, Monaco, Consolas, monospace;
             letter-spacing: -1px;
         }
 
@@ -112,6 +132,17 @@
             to { opacity: 1; }
         }
 
+        /* ===== Background Animation Layer ===== */
+        .bg-animation-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
         /* ===== Parallax Layers ===== */
         .parallax-layer {
             position: absolute;
@@ -119,6 +150,7 @@
             width: 200%;
             image-rendering: pixelated;
             image-rendering: crisp-edges;
+            z-index: 10;
         }
 
         /* Stars Layer (Night only) */
@@ -268,6 +300,34 @@
             to { transform: rotate(360deg); }
         }
 
+        /* Under-Car Lights */
+        .under-car-light {
+            position: absolute;
+            bottom: -8px;
+            left: 10%;
+            width: 80%;
+            height: 12px;
+            border-radius: 50%;
+            filter: blur(8px);
+            opacity: 0.8;
+            pointer-events: none;
+            transition: all var(--transition-medium);
+        }
+
+        .under-car-light.rainbow {
+            animation: rainbow-shift 3s linear infinite;
+        }
+
+        @keyframes rainbow-shift {
+            0% { background: #ff0000; box-shadow: 0 0 20px #ff0000; }
+            16% { background: #ff8800; box-shadow: 0 0 20px #ff8800; }
+            33% { background: #ffff00; box-shadow: 0 0 20px #ffff00; }
+            50% { background: #00ff00; box-shadow: 0 0 20px #00ff00; }
+            66% { background: #00ffff; box-shadow: 0 0 20px #00ffff; }
+            83% { background: #0088ff; box-shadow: 0 0 20px #0088ff; }
+            100% { background: #ff0000; box-shadow: 0 0 20px #ff0000; }
+        }
+
         /* Exhaust Particles */
         .exhaust-container {
             position: absolute;
@@ -376,7 +436,7 @@
         }
 
         .coin-count {
-            font-family: 'Press Start 2P', monospace;
+            font-family: 'Press Start 2P', 'Courier New', Courier, Monaco, Consolas, monospace;
             font-size: 12px;
             color: var(--text-primary);
             min-width: 20px;
@@ -482,7 +542,7 @@
         }
 
         .timer-time {
-            font-family: 'Press Start 2P', monospace;
+            font-family: 'Press Start 2P', 'Courier New', Courier, Monaco, Consolas, monospace;
             font-size: 28px;
             color: var(--text-primary);
             text-shadow: 2px 2px 0 var(--pink-light);
@@ -518,7 +578,7 @@
         }
 
         .btn {
-            font-family: 'Quicksand', sans-serif;
+            font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, sans-serif;
             font-size: 13px;
             font-weight: 600;
             padding: 10px 20px;
@@ -589,7 +649,7 @@
         }
 
         .stat-value {
-            font-family: 'Press Start 2P', monospace;
+            font-family: 'Press Start 2P', 'Courier New', Courier, Monaco, Consolas, monospace;
             font-size: 16px;
             color: var(--pink-deep);
         }
@@ -657,7 +717,7 @@
         }
 
         .panel-title {
-            font-family: 'Press Start 2P', monospace;
+            font-family: 'Press Start 2P', 'Courier New', Courier, Monaco, Consolas, monospace;
             font-size: 14px;
             color: var(--text-primary);
         }
@@ -749,7 +809,7 @@
         }
 
         .item-price {
-            font-family: 'Press Start 2P', monospace;
+            font-family: 'Press Start 2P', 'Courier New', Courier, Monaco, Consolas, monospace;
             font-size: 8px;
             color: var(--coin-gold);
         }
@@ -972,6 +1032,41 @@
         }
 
         /* ===== Responsive Design ===== */
+
+        /* Tablets (landscape iPads, small tablets) */
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .ui-card {
+                width: 340px;
+            }
+
+            .timer-ring {
+                width: 190px;
+                height: 190px;
+            }
+
+            .car-wrapper {
+                width: 110px;
+                height: 55px;
+            }
+
+            .wheel {
+                width: 20px;
+                height: 20px;
+            }
+
+            .shop-panel, .settings-panel {
+                width: 500px;
+            }
+        }
+
+        /* Tablets (portrait iPads, medium tablets) */
+        @media (max-width: 900px) and (min-width: 769px) {
+            .item-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* Small tablets and large phones (landscape) */
         @media (max-width: 768px) {
             .top-bar {
                 top: var(--space-sm);
@@ -984,9 +1079,47 @@
             }
 
             .icon-btn {
-                width: 36px;
-                height: 36px;
+                width: 40px;
+                height: 40px;
                 font-size: 16px;
+                /* Improved touch target size for mobile */
+                min-width: 44px;
+                min-height: 44px;
+            }
+
+            .btn {
+                /* Ensure minimum touch target size */
+                min-height: 44px;
+                padding: 12px 20px;
+            }
+
+            .shop-panel, .settings-panel {
+                width: 90vw;
+                max-height: 80vh;
+            }
+        }
+
+        /* Phones and small tablets (portrait) */
+        @media (max-width: 600px) {
+            .item-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 6px;
+            }
+
+            .shop-item {
+                padding: 6px;
+            }
+
+            .item-preview {
+                font-size: 20px;
+            }
+
+            .item-name {
+                font-size: 7px;
+            }
+
+            .item-price {
+                font-size: 7px;
             }
         }
 
@@ -1178,6 +1311,74 @@
             }
         }
 
+        /* Mobile landscape orientation */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .ui-card {
+                width: 280px;
+                padding: var(--space-sm);
+            }
+
+            .timer-ring {
+                width: 120px;
+                height: 120px;
+            }
+
+            .timer-time {
+                font-size: 18px;
+            }
+
+            .timer-wrapper {
+                margin: var(--space-sm) auto;
+            }
+
+            .controls {
+                margin: var(--space-sm) 0 var(--space-xs);
+            }
+
+            .stats-row {
+                padding-top: var(--space-xs);
+            }
+
+            .mode-badge {
+                margin-bottom: 2px;
+            }
+
+            .session-info {
+                margin-bottom: var(--space-xs);
+            }
+
+            .car-wrapper {
+                width: 70px;
+                height: 35px;
+            }
+
+            .wheel {
+                width: 12px;
+                height: 12px;
+            }
+
+            .celestial {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        /* iPad landscape and similar tablets */
+        @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+            .ui-card {
+                width: 350px;
+            }
+
+            .shop-panel, .settings-panel {
+                width: 600px;
+                max-height: 85vh;
+            }
+
+            .item-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
         @media (min-width: 1200px) {
             .ui-card {
                 width: 360px;
@@ -1243,6 +1444,9 @@
         <!-- Break Glow -->
         <div class="break-glow" id="breakGlow"></div>
 
+        <!-- Background Animation Layer -->
+        <canvas class="bg-animation-layer" id="bgAnimationCanvas"></canvas>
+
         <!-- Parallax Layers -->
         <canvas class="parallax-layer stars-layer" id="starsCanvas"></canvas>
         <canvas class="parallax-layer clouds-layer" id="cloudsCanvas"></canvas>
@@ -1260,6 +1464,7 @@
         <div class="car-container" id="carContainer">
             <div class="exhaust-container" id="exhaustContainer"></div>
             <div class="car-wrapper" id="carWrapper">
+                <div class="under-car-light" id="underCarLight"></div>
                 <canvas class="car-body" id="carCanvas" width="100" height="50"></canvas>
                 <div class="wheel wheel-front" id="wheelFront">
                     <div class="wheel-inner"></div>
@@ -1345,7 +1550,22 @@
         </div>
 
         <div class="shop-section">
-            <div class="shop-section-title">💡 Earn Coins</div>
+            <div class="shop-section-title">💡 Under-Car Lights</div>
+            <div class="item-grid" id="lightGrid"></div>
+        </div>
+
+        <div class="shop-section">
+            <div class="shop-section-title">🎨 Backgrounds</div>
+            <div class="item-grid" id="backgroundGrid"></div>
+        </div>
+
+        <div class="shop-section">
+            <div class="shop-section-title">🛣️ Street Colors</div>
+            <div class="item-grid" id="streetColorGrid"></div>
+        </div>
+
+        <div class="shop-section">
+            <div class="shop-section-title">🪙 Earn Coins</div>
             <p style="font-size: 11px; color: var(--text-secondary); line-height: 1.5;">
                 Earn <strong>+1 coin</strong> every 3 seconds during breaks! 🪙
             </p>
@@ -1445,8 +1665,14 @@
             coins: 0,
             selectedCar: 'pink',
             selectedWheel: 'standard',
+            selectedLight: 'none',
+            selectedBackground: 'vaporwave',
+            selectedStreetColor: 'purple',
             ownedCars: ['pink'],
             ownedWheels: ['standard'],
+            ownedLights: ['none'],
+            ownedBackgrounds: ['vaporwave'],
+            ownedStreetColors: ['purple'],
 
             // Settings
             settings: {
@@ -1475,16 +1701,61 @@
             { id: 'mint', name: 'Minty', price: 100, emoji: '🚕', color: '#b5ead7' },
             { id: 'peach', name: 'Peachy', price: 150, emoji: '🛻', color: '#ffb5a7' },
             { id: 'cyan', name: 'Ocean', price: 200, emoji: '🚐', color: '#7fefef' },
-            { id: 'gold', name: 'Luxe', price: 500, emoji: '🏎️', color: '#ffd700' }
+            { id: 'blue', name: 'Sporty', price: 250, emoji: '🏁', color: '#6495ed' },
+            { id: 'purple', name: 'Royal', price: 300, emoji: '🚌', color: '#9370db' },
+            { id: 'red', name: 'Ruby', price: 350, emoji: '🚒', color: '#ff4757' },
+            { id: 'green', name: 'Emerald', price: 400, emoji: '🚓', color: '#26de81' },
+            { id: 'gold', name: 'Luxe', price: 500, emoji: '🏎️', color: '#ffd700' },
+            { id: 'silver', name: 'Chrome', price: 600, emoji: '🛸', color: '#c0c0c0' },
+            { id: 'black', name: 'Shadow', price: 700, emoji: '🏴', color: '#2c3e50' },
+            { id: 'white', name: 'Pearl', price: 800, emoji: '☁️', color: '#f8f9fa' },
+            { id: 'rainbow', name: 'Prism', price: 1000, emoji: '🌈', color: '#ff6b9d' }
         ];
 
         const WHEELS = [
             { id: 'standard', name: 'Standard', price: 0, color: '#5c4158', accent: '#8b7a96' },
             { id: 'pink', name: 'Pink', price: 30, color: '#ff8fab', accent: '#ffd6e0' },
+            { id: 'white', name: 'White', price: 60, color: '#f0e6f5', accent: '#ffffff' },
             { id: 'gold', name: 'Gold', price: 80, color: '#ffd700', accent: '#fff3b0' },
-            { id: 'rainbow', name: 'Rainbow', price: 150, color: '#c792ea', accent: '#7fefef' },
             { id: 'dark', name: 'Dark', price: 100, color: '#2d1b4e', accent: '#4a2c7a' },
-            { id: 'white', name: 'White', price: 60, color: '#f0e6f5', accent: '#ffffff' }
+            { id: 'chrome', name: 'Chrome', price: 120, color: '#c0c0c0', accent: '#e8e8e8' },
+            { id: 'rainbow', name: 'Rainbow', price: 150, color: '#c792ea', accent: '#7fefef' },
+            { id: 'neon', name: 'Neon', price: 180, color: '#00ff00', accent: '#39ff14' },
+            { id: 'racing', name: 'Racing', price: 200, color: '#ff4757', accent: '#ff6348' },
+            { id: 'vintage', name: 'Vintage', price: 220, color: '#8b4513', accent: '#cd853f' },
+            { id: 'cyber', name: 'Cyber', price: 250, color: '#00f0ff', accent: '#ff00ff' },
+            { id: 'stealth', name: 'Stealth', price: 300, color: '#1a1a1a', accent: '#333333' }
+        ];
+
+        const LIGHTS = [
+            { id: 'none', name: 'No Lights', price: 0, emoji: '⚫', color: 'transparent' },
+            { id: 'blue', name: 'Blue Glow', price: 40, emoji: '💙', color: '#0080ff' },
+            { id: 'pink', name: 'Pink Glow', price: 50, emoji: '💗', color: '#ff69b4' },
+            { id: 'cyan', name: 'Cyan Glow', price: 60, emoji: '💎', color: '#00ffff' },
+            { id: 'purple', name: 'Purple Glow', price: 70, emoji: '💜', color: '#9933ff' },
+            { id: 'green', name: 'Green Glow', price: 80, emoji: '💚', color: '#00ff00' },
+            { id: 'red', name: 'Red Glow', price: 90, emoji: '❤️', color: '#ff0000' },
+            { id: 'gold', name: 'Gold Glow', price: 100, emoji: '✨', color: '#ffd700' },
+            { id: 'rainbow', name: 'Rainbow', price: 200, emoji: '🌈', color: 'rainbow' }
+        ];
+
+        const BACKGROUNDS = [
+            { id: 'vaporwave', name: 'Vaporwave', price: 0, emoji: '🌸', animation: 'none' },
+            { id: 'rain', name: 'Rainy City', price: 150, emoji: '🌧️', animation: 'rain' },
+            { id: 'matrix', name: 'Matrix Code', price: 200, emoji: '💚', animation: 'matrix' },
+            { id: 'grid', name: 'Retro Grid', price: 250, emoji: '🟪', animation: 'grid' },
+            { id: 'sunrays', name: 'Sun Rays', price: 300, emoji: '☀️', animation: 'sunrays' },
+            { id: 'stars', name: 'Starfield', price: 350, emoji: '⭐', animation: 'stars' },
+            { id: 'sakura', name: 'Sakura', price: 400, emoji: '🌸', animation: 'sakura' }
+        ];
+
+        const STREET_COLORS = [
+            { id: 'purple', name: 'Purple', price: 0, emoji: '💜', roadColor: '#e2d1f9', lineColor: '#ffffff' },
+            { id: 'blue', name: 'Blue', price: 50, emoji: '💙', roadColor: '#b3d9ff', lineColor: '#ffffff' },
+            { id: 'green', name: 'Green', price: 80, emoji: '💚', roadColor: '#c8e6c9', lineColor: '#ffffff' },
+            { id: 'pink', name: 'Pink', price: 100, emoji: '💗', roadColor: '#ffc0cb', lineColor: '#ffffff' },
+            { id: 'orange', name: 'Orange', price: 120, emoji: '🧡', roadColor: '#ffcc80', lineColor: '#ffffff' },
+            { id: 'dark', name: 'Dark', price: 150, emoji: '🖤', roadColor: '#2d1b4e', lineColor: '#9b6dff' }
         ];
 
         // ===== DOM Elements =====
@@ -1507,10 +1778,12 @@
             exhaustContainer: document.getElementById('exhaustContainer'),
             carWrapper: document.getElementById('carWrapper'),
             carCanvas: document.getElementById('carCanvas'),
+            underCarLight: document.getElementById('underCarLight'),
             wheelFront: document.getElementById('wheelFront'),
             wheelBack: document.getElementById('wheelBack'),
 
             // Canvases
+            bgAnimationCanvas: document.getElementById('bgAnimationCanvas'),
             starsCanvas: document.getElementById('starsCanvas'),
             cloudsCanvas: document.getElementById('cloudsCanvas'),
             hillsCanvas: document.getElementById('hillsCanvas'),
@@ -1529,6 +1802,9 @@
             closeSettingsBtn: document.getElementById('closeSettingsBtn'),
             carGrid: document.getElementById('carGrid'),
             wheelGrid: document.getElementById('wheelGrid'),
+            lightGrid: document.getElementById('lightGrid'),
+            backgroundGrid: document.getElementById('backgroundGrid'),
+            streetColorGrid: document.getElementById('streetColorGrid'),
             toast: document.getElementById('toast'),
 
             // Settings
@@ -1639,10 +1915,12 @@
 
         // ===== Drawing Functions =====
         function drawStars(canvas) {
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth * 2;
-            canvas.height = window.innerHeight * 0.5;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            try {
+                const ctx = canvas.getContext('2d');
+                if (!ctx) return;
+                canvas.width = window.innerWidth * 2;
+                canvas.height = window.innerHeight * 0.5;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             ctx.fillStyle = '#ffffff';
             for (let i = 0; i < 80; i++) {
@@ -1656,10 +1934,15 @@
             for (let i = 0; i < 15; i++) {
                 ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 4, 4);
             }
+            } catch (e) {
+                console.error('Error drawing stars:', e);
+            }
         }
 
         function drawClouds(canvas) {
+            try {
             const ctx = canvas.getContext('2d');
+            if (!ctx) return;
             canvas.width = window.innerWidth * 2;
             canvas.height = window.innerHeight * 0.2;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1680,6 +1963,9 @@
             clouds.forEach(cloud => {
                 drawPixelCloud(ctx, cloud.x, cloud.y, cloud.scale, cloudColor);
             });
+            } catch (e) {
+                console.error('Error drawing clouds:', e);
+            }
         }
 
         function drawPixelCloud(ctx, x, y, scale, color) {
@@ -1801,17 +2087,18 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             const isNight = state.settings.theme === 'night';
+            const streetColor = STREET_COLORS.find(s => s.id === state.selectedStreetColor) || STREET_COLORS[0];
 
             // Grass
             ctx.fillStyle = isNight ? '#1d3d3a' : '#b5ead7';
             ctx.fillRect(0, 0, canvas.width, canvas.height * 0.35);
 
-            // Road
-            ctx.fillStyle = isNight ? '#2d1b4e' : '#e2d1f9';
+            // Road - use selected street color
+            ctx.fillStyle = isNight ? '#2d1b4e' : streetColor.roadColor;
             ctx.fillRect(0, canvas.height * 0.25, canvas.width, canvas.height * 0.45);
 
-            // Road lines
-            ctx.fillStyle = isNight ? '#9b6dff' : '#ffffff';
+            // Road lines - use selected street color
+            ctx.fillStyle = isNight ? '#9b6dff' : streetColor.lineColor;
             for (let x = 0; x < canvas.width; x += 50) {
                 ctx.fillRect(x, canvas.height * 0.45, 25, 4);
             }
@@ -1945,36 +2232,294 @@
             el.wheelBack.style.borderColor = wheel.accent;
         }
 
+        function updateLights() {
+            const light = LIGHTS.find(l => l.id === state.selectedLight) || LIGHTS[0];
+            el.underCarLight.className = 'under-car-light';
+
+            if (light.id === 'none' || light.color === 'transparent') {
+                el.underCarLight.style.background = 'transparent';
+                el.underCarLight.style.boxShadow = 'none';
+            } else if (light.color === 'rainbow') {
+                el.underCarLight.classList.add('rainbow');
+            } else {
+                el.underCarLight.style.background = light.color;
+                el.underCarLight.style.boxShadow = `0 0 20px ${light.color}, 0 0 40px ${light.color}`;
+            }
+        }
+
+        // ===== Background Animations =====
+        let bgAnimationFrame = null;
+        const bgParticles = [];
+
+        function initBackgroundAnimation() {
+            try {
+                const bg = BACKGROUNDS.find(b => b.id === state.selectedBackground);
+                stopBackgroundAnimation();
+
+                if (!bg || bg.animation === 'none') return;
+
+                bgParticles.length = 0;
+                const canvas = el.bgAnimationCanvas;
+                if (!canvas) return;
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+
+            // Initialize particles based on animation type
+            if (bg.animation === 'rain') {
+                for (let i = 0; i < 100; i++) {
+                    bgParticles.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        speed: 5 + Math.random() * 5,
+                        length: 10 + Math.random() * 20
+                    });
+                }
+            } else if (bg.animation === 'matrix') {
+                for (let i = 0; i < 30; i++) {
+                    bgParticles.push({
+                        x: i * (canvas.width / 30),
+                        y: Math.random() * canvas.height,
+                        speed: 1 + Math.random() * 3,
+                        chars: [],
+                        length: 10 + Math.random() * 20
+                    });
+                }
+            } else if (bg.animation === 'stars') {
+                for (let i = 0; i < 150; i++) {
+                    bgParticles.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        z: Math.random(),
+                        speed: 0.5 + Math.random() * 2
+                    });
+                }
+            } else if (bg.animation === 'sakura') {
+                for (let i = 0; i < 50; i++) {
+                    bgParticles.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * -canvas.height,
+                        speed: 0.5 + Math.random() * 1.5,
+                        size: 3 + Math.random() * 5,
+                        rotation: Math.random() * Math.PI * 2,
+                        rotationSpeed: (Math.random() - 0.5) * 0.05
+                    });
+                }
+            }
+
+            animateBackground();
+            } catch (e) {
+                console.error('Error initializing background animation:', e);
+            }
+        }
+
+        function animateBackground() {
+            try {
+            const bg = BACKGROUNDS.find(b => b.id === state.selectedBackground);
+            if (!bg || bg.animation === 'none') return;
+
+            const canvas = el.bgAnimationCanvas;
+            const ctx = canvas.getContext('2d');
+
+            if (bg.animation === 'rain') {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.strokeStyle = 'rgba(174, 194, 224, 0.5)';
+                ctx.lineWidth = 2;
+
+                bgParticles.forEach(drop => {
+                    ctx.beginPath();
+                    ctx.moveTo(drop.x, drop.y);
+                    ctx.lineTo(drop.x, drop.y + drop.length);
+                    ctx.stroke();
+
+                    drop.y += drop.speed;
+                    if (drop.y > canvas.height) {
+                        drop.y = -drop.length;
+                        drop.x = Math.random() * canvas.width;
+                    }
+                });
+            } else if (bg.animation === 'matrix') {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#0f0';
+                ctx.font = '14px monospace';
+
+                bgParticles.forEach(col => {
+                    const char = String.fromCharCode(0x30A0 + Math.random() * 96);
+                    ctx.fillText(char, col.x, col.y);
+
+                    col.y += col.speed;
+                    if (col.y > canvas.height) {
+                        col.y = 0;
+                    }
+                });
+            } else if (bg.animation === 'grid') {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.strokeStyle = 'rgba(255, 0, 255, 0.3)';
+                ctx.lineWidth = 1;
+
+                const gridSize = 40;
+                const offsetY = (Date.now() / 50) % gridSize;
+
+                // Horizontal lines
+                for (let y = offsetY; y < canvas.height; y += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(canvas.width, y);
+                    ctx.stroke();
+                }
+
+                // Vertical lines
+                for (let x = 0; x < canvas.width; x += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, canvas.height);
+                    ctx.stroke();
+                }
+            } else if (bg.animation === 'sunrays') {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const centerX = canvas.width * 0.9;
+                const centerY = canvas.height * 0.1;
+                const time = Date.now() / 1000;
+
+                ctx.globalAlpha = 0.3;
+                for (let i = 0; i < 12; i++) {
+                    const angle = (i / 12) * Math.PI * 2 + time * 0.1;
+                    const gradient = ctx.createLinearGradient(
+                        centerX, centerY,
+                        centerX + Math.cos(angle) * canvas.width,
+                        centerY + Math.sin(angle) * canvas.height
+                    );
+                    gradient.addColorStop(0, 'rgba(255, 215, 0, 0.3)');
+                    gradient.addColorStop(1, 'rgba(255, 215, 0, 0)');
+
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.moveTo(centerX, centerY);
+                    ctx.arc(centerX, centerY, canvas.height, angle - 0.1, angle + 0.1);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+                ctx.globalAlpha = 1;
+            } else if (bg.animation === 'stars') {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                bgParticles.forEach(star => {
+                    const size = star.z * 3;
+                    ctx.fillStyle = `rgba(255, 255, 255, ${star.z})`;
+                    ctx.fillRect(star.x, star.y, size, size);
+
+                    star.x -= star.speed * star.z;
+                    if (star.x < 0) {
+                        star.x = canvas.width;
+                        star.y = Math.random() * canvas.height;
+                    }
+                });
+            } else if (bg.animation === 'sakura') {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                bgParticles.forEach(petal => {
+                    ctx.save();
+                    ctx.translate(petal.x, petal.y);
+                    ctx.rotate(petal.rotation);
+                    ctx.fillStyle = 'rgba(255, 182, 193, 0.8)';
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, petal.size, petal.size * 0.6, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+
+                    petal.y += petal.speed;
+                    petal.x += Math.sin(petal.y / 50) * 0.5;
+                    petal.rotation += petal.rotationSpeed;
+
+                    if (petal.y > canvas.height) {
+                        petal.y = -20;
+                        petal.x = Math.random() * canvas.width;
+                    }
+                });
+            }
+
+            bgAnimationFrame = requestAnimationFrame(animateBackground);
+            } catch (e) {
+                console.error('Error in background animation:', e);
+                stopBackgroundAnimation();
+            }
+        }
+
+        function stopBackgroundAnimation() {
+            if (bgAnimationFrame) {
+                cancelAnimationFrame(bgAnimationFrame);
+                bgAnimationFrame = null;
+            }
+            const ctx = el.bgAnimationCanvas.getContext('2d');
+            ctx.clearRect(0, 0, el.bgAnimationCanvas.width, el.bgAnimationCanvas.height);
+        }
+
         function drawAllLayers() {
-            drawStars(el.starsCanvas);
-            drawClouds(el.cloudsCanvas);
-            drawHills(el.hillsCanvas);
-            drawBuildings(el.buildingsCanvas);
-            drawGround(el.groundCanvas);
-            drawCelestial(el.celestialCanvas);
-            drawCar();
-            updateWheels();
+            try {
+                // Draw each layer with individual error handling
+                try { drawStars(el.starsCanvas); } catch (e) { console.error('Stars error:', e); }
+                try { drawClouds(el.cloudsCanvas); } catch (e) { console.error('Clouds error:', e); }
+                try { drawHills(el.hillsCanvas); } catch (e) { console.error('Hills error:', e); }
+                try { drawBuildings(el.buildingsCanvas); } catch (e) { console.error('Buildings error:', e); }
+                try { drawGround(el.groundCanvas); } catch (e) { console.error('Ground error:', e); }
+                try { drawCelestial(el.celestialCanvas); } catch (e) { console.error('Celestial error:', e); }
+                try { drawCar(); } catch (e) { console.error('Car error:', e); }
+                try { updateWheels(); } catch (e) { console.error('Wheels error:', e); }
+                try { updateLights(); } catch (e) { console.error('Lights error:', e); }
+                try { initBackgroundAnimation(); } catch (e) { console.error('Background animation error:', e); }
+            } catch (e) {
+                console.error('Critical error in drawAllLayers:', e);
+            }
         }
 
         // ===== Audio =====
         let audioCtx = null;
 
         function initAudio() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            return audioCtx;
+            // Enhanced audio initialization with cross-platform support
+            // Supports: Chrome, Firefox, Safari, Edge, Opera
+            try {
+                if (!audioCtx) {
+                    // Try standard AudioContext first, then webkit prefix for Safari
+                    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                    if (!AudioContextClass) {
+                        console.warn('Web Audio API not supported');
+                        return null;
+                    }
+                    audioCtx = new AudioContextClass();
+                }
+
+                // Resume context if suspended (required by some browsers)
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume().catch(err => {
+                        console.warn('Failed to resume audio context:', err);
+                    });
+                }
+
+                return audioCtx;
+            } catch (e) {
+                console.error('Failed to initialize audio:', e);
+                return null;
+            }
         }
 
         function playSound(type) {
             if (!state.settings.soundEnabled) return;
+
             try {
                 const ctx = initAudio();
+                if (!ctx) return; // Audio not supported
+
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
+
+                // Connect nodes with error handling
                 osc.connect(gain);
                 gain.connect(ctx.destination);
 
-                const vol = state.settings.volume / 100 * 0.15;
+                // Set volume with bounds checking
+                const vol = Math.max(0, Math.min(1, state.settings.volume / 100 * 0.15));
                 gain.gain.setValueAtTime(vol, ctx.currentTime);
 
                 if (type === 'complete') {
@@ -1993,7 +2538,15 @@
                     osc.start(ctx.currentTime);
                     osc.stop(ctx.currentTime + 0.12);
                 }
-            } catch (e) {}
+
+                // Clean up oscillator after it finishes
+                osc.onended = () => {
+                    osc.disconnect();
+                    gain.disconnect();
+                };
+            } catch (e) {
+                console.error('Failed to play sound:', e);
+            }
         }
 
         // ===== Timer =====
@@ -2082,10 +2635,16 @@
             el.gameContainer.classList.remove('driving');
             el.carWrapper.classList.remove('driving');
             el.workOverlay.classList.remove('show');
+
+            // Note: Background animations continue during pause for visual continuity
         }
 
         function resetTimer() {
-            clearInterval(state.timerInterval);
+            // Clear all intervals to prevent memory leaks
+            if (state.timerInterval) {
+                clearInterval(state.timerInterval);
+                state.timerInterval = null;
+            }
             stopCoinGeneration();
             stopExhaust();
             state.isRunning = false;
@@ -2103,7 +2662,11 @@
         }
 
         function timerComplete() {
-            clearInterval(state.timerInterval);
+            // Clear all intervals to prevent memory leaks
+            if (state.timerInterval) {
+                clearInterval(state.timerInterval);
+                state.timerInterval = null;
+            }
             stopCoinGeneration();
             stopExhaust();
             state.isRunning = false;
@@ -2239,6 +2802,69 @@
                 };
                 el.wheelGrid.appendChild(div);
             });
+
+            el.lightGrid.innerHTML = '';
+            LIGHTS.forEach(light => {
+                const owned = state.ownedLights.includes(light.id);
+                const selected = state.selectedLight === light.id;
+                const canAfford = state.coins >= light.price;
+
+                const div = document.createElement('div');
+                div.className = `shop-item ${selected ? 'selected' : ''} ${!owned && !canAfford ? 'locked' : ''}`;
+                div.innerHTML = `
+                    <div class="item-preview">${light.emoji}</div>
+                    <div class="item-name">${light.name}</div>
+                    <div class="item-price ${owned ? 'owned' : ''}">${owned ? '✓' : '🪙' + light.price}</div>
+                `;
+                div.onclick = () => {
+                    if (owned) selectLight(light.id);
+                    else if (canAfford) buyLight(light);
+                    else showToast(`Need ${light.price - state.coins} more coins!`);
+                };
+                el.lightGrid.appendChild(div);
+            });
+
+            el.backgroundGrid.innerHTML = '';
+            BACKGROUNDS.forEach(bg => {
+                const owned = state.ownedBackgrounds.includes(bg.id);
+                const selected = state.selectedBackground === bg.id;
+                const canAfford = state.coins >= bg.price;
+
+                const div = document.createElement('div');
+                div.className = `shop-item ${selected ? 'selected' : ''} ${!owned && !canAfford ? 'locked' : ''}`;
+                div.innerHTML = `
+                    <div class="item-preview">${bg.emoji}</div>
+                    <div class="item-name">${bg.name}</div>
+                    <div class="item-price ${owned ? 'owned' : ''}">${owned ? '✓' : '🪙' + bg.price}</div>
+                `;
+                div.onclick = () => {
+                    if (owned) selectBackground(bg.id);
+                    else if (canAfford) buyBackground(bg);
+                    else showToast(`Need ${bg.price - state.coins} more coins!`);
+                };
+                el.backgroundGrid.appendChild(div);
+            });
+
+            el.streetColorGrid.innerHTML = '';
+            STREET_COLORS.forEach(color => {
+                const owned = state.ownedStreetColors.includes(color.id);
+                const selected = state.selectedStreetColor === color.id;
+                const canAfford = state.coins >= color.price;
+
+                const div = document.createElement('div');
+                div.className = `shop-item ${selected ? 'selected' : ''} ${!owned && !canAfford ? 'locked' : ''}`;
+                div.innerHTML = `
+                    <div class="item-preview">${color.emoji}</div>
+                    <div class="item-name">${color.name}</div>
+                    <div class="item-price ${owned ? 'owned' : ''}">${owned ? '✓' : '🪙' + color.price}</div>
+                `;
+                div.onclick = () => {
+                    if (owned) selectStreetColor(color.id);
+                    else if (canAfford) buyStreetColor(color);
+                    else showToast(`Need ${color.price - state.coins} more coins!`);
+                };
+                el.streetColorGrid.appendChild(div);
+            });
         }
 
         function selectCar(id) {
@@ -2271,6 +2897,54 @@
             selectWheel(wheel.id);
             updateCoinDisplay();
             showToast(`Bought ${wheel.name} wheels! 🎉`);
+        }
+
+        function selectLight(id) {
+            state.selectedLight = id;
+            updateLights();
+            populateShop();
+            saveState();
+            showToast(`Selected ${LIGHTS.find(l => l.id === id).name}!`);
+        }
+
+        function buyLight(light) {
+            state.coins -= light.price;
+            state.ownedLights.push(light.id);
+            selectLight(light.id);
+            updateCoinDisplay();
+            showToast(`Bought ${light.name}! 🎉`);
+        }
+
+        function selectBackground(id) {
+            state.selectedBackground = id;
+            initBackgroundAnimation();
+            populateShop();
+            saveState();
+            showToast(`Selected ${BACKGROUNDS.find(b => b.id === id).name}!`);
+        }
+
+        function buyBackground(bg) {
+            state.coins -= bg.price;
+            state.ownedBackgrounds.push(bg.id);
+            selectBackground(bg.id);
+            updateCoinDisplay();
+            showToast(`Bought ${bg.name}! 🎉`);
+        }
+
+        function selectStreetColor(id) {
+            state.selectedStreetColor = id;
+            drawGround(el.groundCanvas);
+            populateShop();
+            saveState();
+            showToast(`Selected ${STREET_COLORS.find(s => s.id === id).name} street!`);
+        }
+
+        function buyStreetColor(color) {
+            state.coins -= color.price;
+            state.ownedStreetColors.push(color.id);
+            selectStreetColor(color.id);
+            updateCoinDisplay();
+            showToast(`Bought ${color.name} street! 🎉`);
         }
 
         // ===== Panels =====
@@ -2360,8 +3034,14 @@
                 coins: state.coins,
                 selectedCar: state.selectedCar,
                 selectedWheel: state.selectedWheel,
+                selectedLight: state.selectedLight,
+                selectedBackground: state.selectedBackground,
+                selectedStreetColor: state.selectedStreetColor,
                 ownedCars: state.ownedCars,
                 ownedWheels: state.ownedWheels,
+                ownedLights: state.ownedLights,
+                ownedBackgrounds: state.ownedBackgrounds,
+                ownedStreetColors: state.ownedStreetColors,
                 settings: state.settings,
                 stats: state.stats,
                 currentSession: state.currentSession
@@ -2376,8 +3056,14 @@
                     if (data.coins !== undefined) state.coins = data.coins;
                     if (data.selectedCar) state.selectedCar = data.selectedCar;
                     if (data.selectedWheel) state.selectedWheel = data.selectedWheel;
+                    if (data.selectedLight) state.selectedLight = data.selectedLight;
+                    if (data.selectedBackground) state.selectedBackground = data.selectedBackground;
+                    if (data.selectedStreetColor) state.selectedStreetColor = data.selectedStreetColor;
                     if (data.ownedCars) state.ownedCars = data.ownedCars;
                     if (data.ownedWheels) state.ownedWheels = data.ownedWheels;
+                    if (data.ownedLights) state.ownedLights = data.ownedLights;
+                    if (data.ownedBackgrounds) state.ownedBackgrounds = data.ownedBackgrounds;
+                    if (data.ownedStreetColors) state.ownedStreetColors = data.ownedStreetColors;
                     if (data.settings) state.settings = { ...state.settings, ...data.settings };
                     if (data.stats) state.stats = { ...state.stats, ...data.stats };
                     if (data.currentSession) state.currentSession = data.currentSession;
@@ -2409,16 +3095,21 @@
                 state.coins = 0;
                 state.selectedCar = 'pink';
                 state.selectedWheel = 'standard';
+                state.selectedLight = 'none';
+                state.selectedBackground = 'vaporwave';
+                state.selectedStreetColor = 'purple';
                 state.ownedCars = ['pink'];
                 state.ownedWheels = ['standard'];
+                state.ownedLights = ['none'];
+                state.ownedBackgrounds = ['vaporwave'];
+                state.ownedStreetColors = ['purple'];
                 state.stats = { today: 0, totalCoins: 0, lastResetDate: new Date().toDateString() };
                 state.currentSession = 1;
                 resetToDefaults();
                 updateCoinDisplay();
                 updateStatsDisplay();
                 updateSessionInfo();
-                drawCar();
-                updateWheels();
+                drawAllLayers();
                 showToast('All data cleared! 🗑️');
             }
         }
@@ -2483,29 +3174,81 @@
             let resizeTimeout;
             window.onresize = () => {
                 clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(drawAllLayers, 150);
+                resizeTimeout = setTimeout(() => {
+                    // Redraw all layers and reinitialize background animation
+                    drawAllLayers();
+
+                    // Reinitialize background animation with new canvas size
+                    if (state.selectedBackground) {
+                        stopBackgroundAnimation();
+                        initBackgroundAnimation();
+                    }
+                }, 150);
             };
+
+            // Handle orientation change for mobile devices
+            window.addEventListener('orientationchange', () => {
+                setTimeout(() => {
+                    drawAllLayers();
+                    if (state.selectedBackground) {
+                        stopBackgroundAnimation();
+                        initBackgroundAnimation();
+                    }
+                }, 200);
+            });
+
+            // Cleanup on page unload to prevent memory leaks
+            window.addEventListener('beforeunload', () => {
+                // Stop all animations
+                stopBackgroundAnimation();
+                stopExhaust();
+                stopCoinGeneration();
+
+                // Clear all intervals
+                if (state.timerInterval) clearInterval(state.timerInterval);
+                if (state.coinInterval) clearInterval(state.coinInterval);
+                if (state.exhaustInterval) clearInterval(state.exhaustInterval);
+
+                // Close audio context
+                if (audioCtx && audioCtx.state !== 'closed') {
+                    audioCtx.close().catch(() => {});
+                }
+
+                // Save state before leaving
+                saveState();
+            });
         }
 
         // ===== Init =====
         function init() {
-            loadState();
-            setTheme(state.settings.theme);
-            initSettingsUI();
-            initParticlePool();
+            try {
+                loadState();
+                setTheme(state.settings.theme);
+                initSettingsUI();
+                initParticlePool();
 
-            state.timeRemaining = state.settings.workDuration * 60;
-            state.totalTime = state.settings.workDuration * 60;
+                state.timeRemaining = state.settings.workDuration * 60;
+                state.totalTime = state.settings.workDuration * 60;
 
-            drawAllLayers();
-            updateDisplay();
-            updateSessionInfo();
-            updateCoinDisplay();
-            updateStatsDisplay();
-            setupEvents();
+                drawAllLayers();
+                updateDisplay();
+                updateSessionInfo();
+                updateCoinDisplay();
+                updateStatsDisplay();
+                setupEvents();
+            } catch (e) {
+                console.error('Critical error during initialization:', e);
+                alert('Failed to initialize the app. Please refresh the page.');
+            }
         }
 
-        init();
+        // Start the application
+        try {
+            init();
+        } catch (e) {
+            console.error('Fatal error:', e);
+            document.body.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif; text-align: center; padding: 20px;"><div><h1>❌ Failed to load</h1><p>Please refresh the page or clear your browser cache.</p></div></div>';
+        }
     </script>
 </body>
 </html>
